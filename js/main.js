@@ -124,7 +124,7 @@ function fitHeadlines() {
   const contact = document.querySelector(".contact__title");
   if (contact) {
     const inners = [...contact.querySelectorAll(".split, .contact__line--serif .serif")];
-    if (inners.length) fitFontSize(contact, inners, () => contact.clientWidth, 36, 200);
+    if (inners.length) fitFontSize(contact, inners, () => contact.clientWidth, 32, 130);
   }
 }
 
@@ -468,6 +468,10 @@ function buildScrollReveals() {
     gsap.set(".reveal-line", { opacity: 1, y: 0 });
     document.querySelectorAll(".about__text .line, .contact__line--serif .serif").forEach((el) => (el.style.transform = "none"));
     document.querySelectorAll(".profile__imgwrap").forEach((el) => (el.style.clipPath = "none"));
+    document.querySelectorAll(".contact__line .char").forEach((el) => {
+      el.style.color = "";
+      el.style.webkitTextStrokeWidth = "0px";
+    });
     return;
   }
 
@@ -518,6 +522,19 @@ function buildScrollReveals() {
     // absolute y (~px) in the matrix, so we must zero BOTH y and yPercent to
     // actually reveal it (and a .from would tween 110%→110% — also wrong).
     .to(".contact__line--serif .serif", { y: 0, yPercent: 0, duration: 1.2 }, 0.35);
+
+  // Ghost-outline → solid fill, scrubbed continuously with scroll (not a
+  // one-shot reveal): letters wipe solid left-to-right as the footer scrolls
+  // through view, "create" settles in alongside it on the same scrub clock.
+  const inkColor = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#eae6dd";
+  gsap.timeline({
+    scrollTrigger: { trigger: ".contact", start: "top 75%", end: "top 15%", scrub: 0.6 },
+    defaults: { ease: "none" },
+  })
+    .to(".contact__line:not(.contact__line--serif) .char", {
+      color: inkColor, "-webkit-text-stroke-width": 0, stagger: 0.02,
+    }, 0)
+    .from(".contact__line--serif .serif", { scale: 0.75, rotate: -8, duration: 1 }, 0);
 }
 
 /* ------------------------------------------------------------
@@ -703,6 +720,25 @@ mm.add("(max-width: 900px)", () => {
   /* Open the viewer. When `origin` (the clicked thumbnail <img>) is given,
      a clone flies from the thumbnail's rect to the stage (FLIP) while the
      full-resolution image loads underneath, then crossfades away. */
+  /* Budget height around the meta block + stage gap + lightbox padding —
+     not just 76vh — otherwise a tall meta caption forces the flex-shrunk
+     .lightbox__imgwrap shorter than this box and its overflow:hidden
+     clips the bottom of the image off. Used to size the image explicitly
+     in px (both for the FLIP flight and its resting state) since
+     width:auto/height:auto + max-height on the <img> does NOT respect the
+     wrap's actual flex-shrunk box — only its own max-height/max-width. */
+  function fitLightboxImage(natR) {
+    const metaH = (lb.querySelector(".lightbox__meta") || {}).offsetHeight || 90;
+    const lbCS = getComputedStyle(lb);
+    const padY = (parseFloat(lbCS.paddingTop) || 0) + (parseFloat(lbCS.paddingBottom) || 0);
+    const gapH = parseFloat(getComputedStyle(stage).rowGap) || 20;
+    const maxW = Math.min(window.innerWidth * 0.92, 1100);
+    const maxH = Math.min(window.innerHeight * 0.76, window.innerHeight - padY - metaH - gapH - 8);
+    let w = maxW, h = w / natR;
+    if (h > maxH) { h = maxH; w = h * natR; }
+    return { w, h, metaH };
+  }
+
   function open(i, origin) {
     idx = i; fill(i); isOpen = true;
     lb.classList.add("is-open");
@@ -719,11 +755,7 @@ mm.add("(max-width: 900px)", () => {
       const natR = (origin.naturalWidth > 0 && origin.naturalHeight > 0)
         ? origin.naturalWidth / origin.naturalHeight
         : r.width / Math.max(r.height, 1);
-      const maxW = Math.min(window.innerWidth * 0.92, 1100);
-      const maxH = window.innerHeight * 0.76;
-      let tw = maxW, th = tw / natR;
-      if (th > maxH) { th = maxH; tw = th * natR; }
-      const metaH = (lb.querySelector(".lightbox__meta") || {}).offsetHeight || 90;
+      const { w: tw, h: th, metaH } = fitLightboxImage(natR);
       const tx = (window.innerWidth - tw) / 2;
       const ty = Math.max((window.innerHeight - th - metaH - 20) / 2, 20);
 
@@ -746,8 +778,25 @@ mm.add("(max-width: 900px)", () => {
       };
       const fallback = setTimeout(clear, 1500);
       const ready = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
-      Promise.resolve(ready).then(() => setTimeout(() => { clearTimeout(fallback); clear(); }, 820));
+      Promise.resolve(ready).then(() => {
+        // The origin thumbnail is lazy-loaded and may not have finished
+        // loading at click time, making natR an unreliable guess from the
+        // rendered box instead of the real image. Re-fit now that the
+        // actual full-res image is guaranteed decoded, so the settled
+        // image is never sized off a wrong ratio (which is what let
+        // .lightbox__imgwrap's overflow:hidden clip it).
+        if (img.naturalWidth > 0) {
+          const fixed = fitLightboxImage(img.naturalWidth / img.naturalHeight);
+          img.style.width = fixed.w + "px"; img.style.height = fixed.h + "px";
+        }
+        setTimeout(() => { clearTimeout(fallback); clear(); }, 820);
+      });
     } else {
+      const natR = (origin && origin.naturalWidth > 0 && origin.naturalHeight > 0)
+        ? origin.naturalWidth / origin.naturalHeight : null;
+      const applyFit = (r) => { const { w, h } = fitLightboxImage(r); img.style.width = w + "px"; img.style.height = h + "px"; };
+      if (natR) applyFit(natR);
+      else img.addEventListener("load", () => applyFit(img.naturalWidth / img.naturalHeight), { once: true });
       gsap.fromTo(stage, { opacity: 0, scale: 0.92, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: EASE });
       gsap.fromTo(img, { scale: 1.18 }, { scale: 1, duration: 0.9, ease: EASE });
     }
@@ -774,6 +823,9 @@ mm.add("(max-width: 900px)", () => {
   function go(dir) {
     idx = (idx + dir + frames.length) % frames.length;
     fill(idx);
+    const applyFit = () => { const { w, h } = fitLightboxImage(img.naturalWidth / img.naturalHeight); img.style.width = w + "px"; img.style.height = h + "px"; };
+    if (img.complete && img.naturalWidth > 0) applyFit();
+    else img.addEventListener("load", applyFit, { once: true });
     gsap.fromTo(img, { opacity: 0, x: dir * 60 }, { opacity: 1, x: 0, duration: 0.6, ease: EASE });
     gsap.fromTo([numEl, titleEl, placeEl], { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.04, ease: EASE });
     preload((idx + 1) % frames.length); preload((idx - 1 + frames.length) % frames.length);
@@ -1102,9 +1154,19 @@ if (!TOUCH) {
 ------------------------------------------------------------ */
 (function clock() {
   const els = [document.getElementById("clock"), document.getElementById("menuClock"), document.getElementById("clockGrid")].filter(Boolean);
-  if (!els.length) return;
+  const headerClock = document.getElementById("headerClock");
+  if (!els.length && !headerClock) return;
   const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  const update = () => { const t = `${fmt.format(new Date())} IST`; els.forEach((e) => (e.textContent = t)); };
+  const headerFmt = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kolkata", day: "2-digit", month: "short", year: "numeric",
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true,
+  });
+  const update = () => {
+    const now = new Date();
+    const t = `${fmt.format(now)} IST`;
+    els.forEach((e) => (e.textContent = t));
+    if (headerClock) headerClock.textContent = headerFmt.format(now);
+  };
   update(); setInterval(update, 1000);
 })();
 

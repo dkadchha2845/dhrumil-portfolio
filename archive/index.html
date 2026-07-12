@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Photography Archive — Dhrumil Kadchha</title>
+  <meta name="description" content="An immersive digital exhibition of photographic work by Dhrumil Kadchha." />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+  <link rel="apple-touch-icon" href="/favicon-180.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/archive/css/archive.css" />
+</head>
+<body>
+
+  <!-- Entrance Overlay -->
+  <div class="archive-entrance" id="archiveEntrance">
+    <div class="archive-entrance__panel archive-entrance__panel--top"></div>
+    <div class="archive-entrance__panel archive-entrance__panel--bottom"></div>
+    <div class="archive-entrance__label mono">LOADING EXHIBITION</div>
+    <div class="archive-entrance__count mono" id="entranceCount">00</div>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__label"><span id="cursorLabel">VIEW</span></div>
+  </div>
+
+  <!-- Header -->
+  <header class="archive-header" id="archiveHeader">
+    <a href="/" class="archive-header__logo" data-hover aria-label="Back to Home">
+      <span style="font-family:var(--font-wagon);font-style:italic;font-weight:300;font-size:clamp(21px,2.4vw,28px);">DK<span style="font-family:var(--font-pixel);font-style:normal;color:var(--accent);font-size:0.68em;margin-left:1px;">.</span></span>
+    </a>
+    <div class="archive-header__center mono">EXHIBITION · 01</div>
+    <a href="/" class="archive-header__close mono" data-hover>
+      <span>CLOSE</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+    </a>
+  </header>
+
+  <!-- Mode Selector -->
+  <nav class="mode-selector" id="modeSelector" aria-label="View Modes">
+    <div class="mode-selector__pill">
+      <button class="mode-btn is-active" data-mode="vertical" aria-label="Vertical Masonry">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="6" height="8" rx="1"/><rect x="12" y="2" width="6" height="5" rx="1"/><rect x="2" y="13" width="6" height="5" rx="1"/><rect x="12" y="10" width="6" height="8" rx="1"/></svg>
+        <span class="mode-btn__label mono">FLOW</span>
+      </button>
+      <button class="mode-btn" data-mode="horizontal" aria-label="Horizontal Reel">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="5" width="5" height="10" rx="1"/><rect x="7.5" y="5" width="5" height="10" rx="1"/><rect x="14" y="5" width="5" height="10" rx="1"/></svg>
+        <span class="mode-btn__label mono">REEL</span>
+      </button>
+      <button class="mode-btn" data-mode="grid" aria-label="Grid Explorer">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="11" y="2" width="7" height="7" rx="1"/><rect x="2" y="11" width="7" height="7" rx="1"/><rect x="11" y="11" width="7" height="7" rx="1"/></svg>
+        <span class="mode-btn__label mono">GRID</span>
+      </button>
+      <button class="mode-btn" data-mode="circular" aria-label="Circular Wheel">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="10" r="2"/></svg>
+        <span class="mode-btn__label mono">ORBIT</span>
+      </button>
+      <button class="mode-btn" data-mode="floating" aria-label="Floating Canvas">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="5" height="4" rx="1" transform="rotate(-8 3.5 5)"/><rect x="11" y="1" width="6" height="5" rx="1" transform="rotate(5 14 3.5)"/><rect x="3" y="12" width="5" height="6" rx="1" transform="rotate(6 5.5 15)"/><rect x="13" y="13" width="5" height="4" rx="1" transform="rotate(-4 15.5 15)"/></svg>
+        <span class="mode-btn__label mono">SCATTER</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Image Counter -->
+  <div class="archive-counter mono" id="archiveCounter">
+    <span id="counterCurrent">01</span> / <span id="counterTotal">00</span>
+  </div>
+
+  <main class="archive-main" id="archiveMain">
+    <section class="gallery" id="gallery" data-mode="vertical">
+      <div class="gallery__wrapper" id="galleryWrapper">
+        <!-- JS injects gallery items here -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Fullscreen Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox__bg" id="lightboxBg"></div>
+    <div class="lightbox__content">
+      <div class="lightbox__header">
+        <div class="lightbox__meta" id="lightboxMeta">
+          <div class="lightbox__title" id="lightboxTitle"></div>
+          <div class="lightbox__info mono" id="lightboxInfo"></div>
+        </div>
+        <button class="lightbox__close mono" id="lightboxClose" data-hover>
+          CLOSE
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+      </div>
+      <div class="lightbox__stage" id="lightboxStage">
+        <img src="" id="lightboxImg" alt="" />
+      </div>
+      <button class="lightbox__arrow lightbox__arrow--prev" id="lightboxPrev" aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="lightbox__arrow lightbox__arrow--next" id="lightboxNext" aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <div class="lightbox__counter mono" id="lightboxCounter"></div>
+    </div>
+  </div>
+
+  <!-- Scripts: GSAP loaded as regular scripts so globals are available -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Observer.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+
+  <!-- Archive JS loaded as plain script (NOT module) so GSAP globals work -->
+  <script src="/archive/js/archive.js"></script>
+</body>
+</html>
