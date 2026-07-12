@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>
+    /* Swap no-js -> js before first paint so "hidden until revealed" states
+       only ever apply when JS is actually running. Hard failsafe below. */
+    (function () {
+      var d = document.documentElement;
+      d.classList.remove("no-js");
+      d.classList.add("js");
+      /* If the intro never completes (throttled rAF, script error, slow CDN),
+         force everything visible after 6s so the page is never stuck blank. */
+      window.__failsafe = setTimeout(function () { d.classList.add("fx-failsafe"); }, 6000);
+      window.addEventListener("error", function () {
+        /* Only force-reveal while the page could still be blank (pre-intro). */
+        if (!window.__introDone) d.classList.add("fx-failsafe");
+      });
+    })();
+  </script>
+  <title>Dhrumil Kadchha — UI/UX Designer & Photographer</title>
+  <meta name="description" content="Portfolio of Dhrumil Kadchha — UI/UX designer and photographer. Crafting interfaces, capturing light." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..600&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__inner">
+      <div class="preloader__name" aria-hidden="true">
+        <span>D</span><span>H</span><span>R</span><span>U</span><span>M</span><span>I</span><span>L</span>
+      </div>
+      <div class="preloader__count"><span id="loadCount">00</span></div>
+    </div>
+    <div class="preloader__panel preloader__panel--top"></div>
+    <div class="preloader__panel preloader__panel--bottom"></div>
+  </div>
+
+  <!-- Grain -->
+  <!-- <div class="grain" aria-hidden="true"></div> -->
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__label"><span id="cursorLabel">VIEW</span></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <a href="#top" class="header__logo" data-hover>DK<sup>©</sup></a>
+
+    <nav class="header__nav" aria-label="Primary">
+      <a href="#about" class="nav-link" data-nav data-hover>
+        <span class="nav-link__num">01</span>
+        <span class="nav-link__label"><span>About</span><span aria-hidden="true">About</span></span>
+      </a>
+      <a href="#work" class="nav-link" data-nav data-hover>
+        <span class="nav-link__num">02</span>
+        <span class="nav-link__label"><span>Work</span><span aria-hidden="true">Work</span></span>
+      </a>
+      <a href="#archive" class="nav-link" data-nav data-hover>
+        <span class="nav-link__num">03</span>
+        <span class="nav-link__label"><span>Archive</span><span aria-hidden="true">Archive</span></span>
+      </a>
+      <a href="#contact" class="nav-link" data-nav data-hover>
+        <span class="nav-link__num">04</span>
+        <span class="nav-link__label"><span>Contact</span><span aria-hidden="true">Contact</span></span>
+      </a>
+    </nav>
+
+    <div class="header__meta">
+      <span class="header__dot"></span>
+      <span>Available for work</span>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="menu" data-hover>
+      <span class="nav-toggle__txt"><span>Menu</span><span aria-hidden="true">Close</span></span>
+      <span class="nav-toggle__icon"><i></i><i></i></span>
+    </button>
+  </header>
+
+  <!-- Scroll progress -->
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <!-- Fullscreen overlay menu (mobile) -->
+  <nav class="menu" id="menu" aria-label="Menu" aria-hidden="true">
+    <div class="menu__bg"></div>
+    <div class="menu__inner">
+      <ul class="menu__list">
+        <li class="menu__item"><a href="#about" data-menu data-hover><span class="menu__num">01</span><span class="menu__txt">About</span></a></li>
+        <li class="menu__item"><a href="#work" data-menu data-hover><span class="menu__num">02</span><span class="menu__txt">Work</span></a></li>
+        <li class="menu__item"><a href="#archive" data-menu data-hover><span class="menu__num">03</span><span class="menu__txt">Archive</span></a></li>
+        <li class="menu__item"><a href="#contact" data-menu data-hover><span class="menu__num">04</span><span class="menu__txt">Contact</span></a></li>
+      </ul>
+      <div class="menu__foot">
+        <a class="menu__mail" href="mailto:dhrumilkadchha@gmail.com" data-hover>dhrumilkadchha@gmail.com</a>
+        <div class="menu__socials">
+          <a href="https://www.instagram.com/photos.labyrinth/" target="_blank" rel="noopener" data-hover>Instagram</a>
+          <a href="https://www.linkedin.com/in/dhrumilkadchha/" target="_blank" rel="noopener" data-hover>LinkedIn</a>
+          <a href="https://x.com/dhrumil_kadchha" target="_blank" rel="noopener" data-hover>X</a>
+        </div>
+        <span class="menu__clock mono" id="menuClock">--:--:-- IST</span>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- Interactive Background Glow -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+      <canvas id="webgl" aria-hidden="true"></canvas>
+
+      <div class="hero__content">
+        <div class="hero__eyebrow reveal-line">
+          <span>UI/UX Designer</span>
+          <span class="hero__eyebrow-divider">&</span>
+          <span class="serif">Photographer</span>
+        </div>
+        <h1 class="hero__title" aria-label="Dhrumil Kadchha">
+          <span class="hero__line"><span class="split" data-split>DHRUMIL</span></span>
+          <span class="hero__line hero__line--offset"><span class="split" data-split>KADCHHA</span></span>
+        </h1>
+        <div class="hero__bottom">
+          <p class="hero__desc reveal-line">Designing interfaces with intent.<br/>Capturing light in between.</p>
+          <div class="hero__scroll reveal-line">
+            <span>Scroll</span>
+            <div class="hero__scroll-track"><div class="hero__scroll-thumb"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track" id="marqueeTrack">
+        <div class="marquee__group">
+          <span>Product Design</span><em>✦</em><span>UX Research</span><em>✦</em><span class="serif">Photography</span><em>✦</em><span>Interaction</span><em>✦</em><span>Design Systems</span><em>✦</em>
+        </div>
+        <div class="marquee__group">
+          <span>Product Design</span><em>✦</em><span>UX Research</span><em>✦</em><span class="serif">Photography</span><em>✦</em><span>Interaction</span><em>✦</em><span>Design Systems</span><em>✦</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="about" id="about">
+      <div class="about__index mono">01 / Manifesto</div>
+      <p class="about__text" data-lines>
+        I'm a designer who believes the best interfaces feel inevitable — and a photographer who knows the best frames are never planned. Two crafts, one obsession: <span class="serif">noticing what others miss.</span>
+      </p>
+      <div class="about__meta">
+        <div class="about__meta-item reveal-line"><span class="mono">Based in</span><strong>Bangalore, India ・ Working worldwide</strong></div>
+        <div class="about__meta-item reveal-line"><span class="mono">Focus</span><strong>Product, Brand, Lens</strong></div>
+        <div class="about__meta-item reveal-line"><span class="mono">Since</span><strong>2023</strong></div>
+      </div>
+
+      <!-- Profile -->
+      <div class="profile">
+        <figure class="profile__media" id="profileMedia">
+          <div class="profile__imgwrap">
+            <img src="images/about/portrait.jpg" alt="Portrait of Dhrumil Kadchha" width="1200" height="1600" loading="lazy" decoding="async"/>
+          </div>
+          <figcaption class="mono">Dhrumil Kadchha ・ Bangalore ・ 2026</figcaption>
+        </figure>
+
+        <div class="profile__body">
+          <div class="profile__block reveal-line">
+            <h3 class="mono">What I do</h3>
+            <p>I design digital experiences that balance clarity, aesthetics, and usability — creating interfaces, systems, and visual identities that feel intuitive and meaningful.</p>
+          </div>
+          <div class="profile__block reveal-line">
+            <h3 class="mono">My background</h3>
+            <p>Coming from a technology and creative background, I've worked across interface design, development, branding, and experience-driven projects — combining structured thinking with creative exploration.</p>
+          </div>
+          <div class="profile__block reveal-line">
+            <h3 class="mono">My approach</h3>
+            <p>Design is more than aesthetics — it is communication, intention, and problem-solving. I listen, experiment, and refine to create experiences that feel simple, thoughtful, and lasting.</p>
+          </div>
+
+          <ol class="profile__career" aria-label="Career timeline">
+            <li class="career-row"><span class="career-row__year mono">2023 — Present</span><span class="career-row__what">Computer Engineering + Creative Design Exploration</span></li>
+            <li class="career-row"><span class="career-row__year mono">2024 — Present</span><span class="career-row__what">UI/UX, Web &amp; Product Design Projects</span></li>
+            <li class="career-row"><span class="career-row__year mono">2025 — Present</span><span class="career-row__what">Creative Direction &amp; Event Experience — <span class="serif">Blends</span></span></li>
+            <li class="career-row"><span class="career-row__year mono">Present</span><span class="career-row__what">Independent Designer &amp; Digital Creator</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SELECTED WORK ============ -->
+    <section class="work" id="work">
+      <div class="work__head">
+        <div class="about__index mono">02 / Selected Work</div>
+        <h2 class="section-title"><span class="split" data-split>WORK</span></h2>
+      </div>
+
+      <div class="work__pin" id="workPin">
+        <div class="work__track" id="workTrack">
+          <article class="work-card" data-project="blends-website" data-hover-label="OPEN" tabindex="0" role="button" aria-label="Open case study: Blends">
+            <div class="work-card__img"><img src="images/work/blends-website.jpg" alt="Blends case study" loading="eager"/></div>
+            <div class="work-card__info">
+              <span class="mono work-card__num">001</span>
+              <h3>Blends</h3>
+              <p>Designing a campus event discovery platform from the ground up</p>
+              <div class="work-card__tags"><span>Product</span><span>Web</span><span>System</span></div>
+            </div>
+          </article>
+          <article class="work-card" data-project="traffic-ai" data-hover-label="OPEN" tabindex="0" role="button" aria-label="Open case study: Traffic AI">
+            <div class="work-card__img"><img src="images/work/traffic-ai.jpg" alt="Traffic AI case study" loading="lazy"/></div>
+            <div class="work-card__info">
+              <span class="mono work-card__num">002</span>
+              <h3>Traffic AI</h3>
+              <p>Orchestrating city traffic with autonomous agentic AI</p>
+              <div class="work-card__tags"><span>AI</span><span>Dashboard</span><span>DataViz</span></div>
+            </div>
+          </article>
+          <article class="work-card" data-project="meteor-madness" data-hover-label="OPEN" tabindex="0" role="button" aria-label="Open case study: Meteor Madness">
+            <div class="work-card__img"><img src="images/work/meteor-madness.jpg" alt="Meteor Madness case study" loading="lazy"/></div>
+            <div class="work-card__info">
+              <span class="mono work-card__num">003</span>
+              <h3>Meteor Madness</h3>
+              <p>Simulating asteroid impacts with real NASA data</p>
+              <div class="work-card__tags"><span>DataViz</span><span>Simulation</span><span>NASA</span></div>
+            </div>
+          </article>
+          <article class="work-card" data-project="blends-app" data-hover-label="OPEN" tabindex="0" role="button" aria-label="Open case study: Blends App">
+            <div class="work-card__img"><img src="images/work/blends-app.jpg" alt="Blends App case study" loading="lazy"/></div>
+            <div class="work-card__info">
+              <span class="mono work-card__num">004</span>
+              <h3>Blends App</h3>
+              <p>Prototyping the campus event experience, screen by screen</p>
+              <div class="work-card__tags"><span>Mobile</span><span>Prototype</span><span>iOS</span></div>
+            </div>
+          </article>
+        
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PHOTO ARCHIVE ============ -->
+    <section class="archive" id="archive">
+      <div class="archive__head">
+        <div class="about__index mono">03 / Photo Archives</div>
+        <h2 class="section-title"><span class="split" data-split>ARCHIVES</span></h2>
+        <p class="archive__sub reveal-line">Frames collected between projects. <span class="serif">Scroll to develop the contact sheet.</span></p>
+      </div>
+
+      <!-- Scatter -> contact sheet (scroll experience) -->
+      <div class="sheet" id="sheet">
+        <div class="sheet__grid" id="sheetGrid">
+          <figure class="sheet__cell" data-frame="0" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p003.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+          <figure class="sheet__cell" data-frame="1" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p004.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+          <figure class="sheet__cell" data-frame="2" role="button" tabindex="0" aria-label="Open photograph — Nikon D5100 ・ 50mm ・ f/9.0" data-hover-label="OPEN"><img src="images/archive/thumb/p005.jpg" alt="Nikon D5100 ・ 50mm ・ f/9.0"/></figure>
+          <figure class="sheet__cell" data-frame="3" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p006.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+          <figure class="sheet__cell" data-frame="4" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p007.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+          <figure class="sheet__cell" data-frame="5" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p008.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+          <figure class="sheet__cell" data-frame="6" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p009.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+          <figure class="sheet__cell" data-frame="7" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p010.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+          <figure class="sheet__cell" data-frame="8" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p011.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+          <figure class="sheet__cell" data-frame="9" role="button" tabindex="0" aria-label="Open photograph — iPhone 15 ・ 6mm ・ f/1.6" data-hover-label="OPEN"><img src="images/archive/thumb/p012.jpg" alt="iPhone 15 ・ 6mm ・ f/1.6"/></figure>
+        
+        </div>
+        <div class="sheet__caption mono" id="sheetCaption">CONTACT SHEET — 35MM ・ 2021—2026</div>
+      </div>
+
+      <!-- Film reel — draggable, inertial, "develops" in focus, opens to lightbox -->
+      <div class="reel" id="reel">
+        <div class="reel__rail" id="reelRail">
+          <figure class="frame" data-img="images/archive/p003.jpg" data-hover-label="OPEN"
+                  data-num="A·01" data-title="FEB 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/35s ・ ISO200 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p003.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/35s ・ ISO200 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·01</span>
+              <span class="frame__title">FEB 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p004.jpg" data-hover-label="OPEN"
+                  data-num="A·02" data-title="FEB 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO40 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p004.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO40 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·02</span>
+              <span class="frame__title">FEB 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p005.jpg" data-hover-label="OPEN"
+                  data-num="A·03" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/9.0 ・ 1/8s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p005.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/9.0 ・ 1/8s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·03</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/9.0</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p006.jpg" data-hover-label="OPEN"
+                  data-num="A·04" data-title="FEB 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/35s ・ ISO160 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p006.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/35s ・ ISO160 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·04</span>
+              <span class="frame__title">FEB 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p007.jpg" data-hover-label="OPEN"
+                  data-num="A·05" data-title="FEB 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/2400s ・ ISO32 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p007.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/2400s ・ ISO32 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·05</span>
+              <span class="frame__title">FEB 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p008.jpg" data-hover-label="OPEN"
+                  data-num="A·06" data-title="JAN 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/180s ・ ISO40 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p008.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/180s ・ ISO40 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·06</span>
+              <span class="frame__title">JAN 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p009.jpg" data-hover-label="OPEN"
+                  data-num="A·07" data-title="JAN 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/4600s ・ ISO50 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p009.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/4600s ・ ISO50 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·07</span>
+              <span class="frame__title">JAN 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p010.jpg" data-hover-label="OPEN"
+                  data-num="A·08" data-title="NOV 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/17s ・ ISO500 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p010.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/17s ・ ISO500 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·08</span>
+              <span class="frame__title">NOV 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p011.jpg" data-hover-label="OPEN"
+                  data-num="A·09" data-title="OCT 2024" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/5300s ・ ISO40 ・ 2024">
+            <div class="frame__media"><img src="images/archive/thumb/p011.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/5300s ・ ISO40 ・ 2024" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·09</span>
+              <span class="frame__title">OCT 2024</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p012.jpg" data-hover-label="OPEN"
+                  data-num="A·10" data-title="OCT 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO80 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p012.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO80 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·10</span>
+              <span class="frame__title">OCT 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p013.jpg" data-hover-label="OPEN"
+                  data-num="A·11" data-title="JAN 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO160 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p013.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO160 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·11</span>
+              <span class="frame__title">JAN 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p014.jpg" data-hover-label="OPEN"
+                  data-num="A·12" data-title="JAN 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/4000s ・ ISO40 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p014.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/4000s ・ ISO40 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·12</span>
+              <span class="frame__title">JAN 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p015.jpg" data-hover-label="OPEN"
+                  data-num="A·13" data-title="JAN 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/7200s ・ ISO40 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p015.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/7200s ・ ISO40 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·13</span>
+              <span class="frame__title">JAN 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p016.jpg" data-hover-label="OPEN"
+                  data-num="A·14" data-title="DEC 2025" data-place="iPhone 15 ・ 3mm ・ f/1.9 ・ 1/50s ・ ISO250 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p016.jpg" alt="Photograph — iPhone 15 ・ 3mm ・ f/1.9 ・ 1/50s ・ ISO250 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·14</span>
+              <span class="frame__title">DEC 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 3mm ・ f/1.9</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p017.jpg" data-hover-label="OPEN"
+                  data-num="A·15" data-title="DEC 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/250s ・ ISO32 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p017.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/250s ・ ISO32 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·15</span>
+              <span class="frame__title">DEC 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p018.jpg" data-hover-label="OPEN"
+                  data-num="A·16" data-title="NOV 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/25s ・ ISO320 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p018.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/25s ・ ISO320 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·16</span>
+              <span class="frame__title">NOV 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p019.jpg" data-hover-label="OPEN"
+                  data-num="A·17" data-title="OCT 2024" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/5600s ・ ISO40 ・ 2024">
+            <div class="frame__media"><img src="images/archive/thumb/p019.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/5600s ・ ISO40 ・ 2024" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·17</span>
+              <span class="frame__title">OCT 2024</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p020.jpg" data-hover-label="OPEN"
+                  data-num="A·18" data-title="OCT 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/35s ・ ISO125 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p020.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/35s ・ ISO125 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·18</span>
+              <span class="frame__title">OCT 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p021.jpg" data-hover-label="OPEN"
+                  data-num="A·19" data-title="OCT 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO50 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p021.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO50 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·19</span>
+              <span class="frame__title">OCT 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p022.jpg" data-hover-label="OPEN"
+                  data-num="A·20" data-title="OCT 2024" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO64 ・ 2024">
+            <div class="frame__media"><img src="images/archive/thumb/p022.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO64 ・ 2024" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·20</span>
+              <span class="frame__title">OCT 2024</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p023.jpg" data-hover-label="OPEN"
+                  data-num="A·21" data-title="OCT 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/80s ・ ISO32 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p023.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/80s ・ ISO32 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·21</span>
+              <span class="frame__title">OCT 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p024.jpg" data-hover-label="OPEN"
+                  data-num="A·22" data-title="Untitled" data-place="Archive">
+            <div class="frame__media"><img src="images/archive/thumb/p024.jpg" alt="Photograph — Archive" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·22</span>
+              <span class="frame__title">Untitled</span>
+              <span class="frame__meta mono">Archive</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p025.jpg" data-hover-label="OPEN"
+                  data-num="A·23" data-title="AUG 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/60s ・ ISO40 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p025.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/60s ・ ISO40 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·23</span>
+              <span class="frame__title">AUG 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p026.jpg" data-hover-label="OPEN"
+                  data-num="A·24" data-title="AUG 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/620s ・ ISO32 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p026.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/620s ・ ISO32 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·24</span>
+              <span class="frame__title">AUG 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p027.jpg" data-hover-label="OPEN"
+                  data-num="A·25" data-title="AUG 2024" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/4600s ・ ISO50 ・ 2024">
+            <div class="frame__media"><img src="images/archive/thumb/p027.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/4600s ・ ISO50 ・ 2024" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·25</span>
+              <span class="frame__title">AUG 2024</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p028.jpg" data-hover-label="OPEN"
+                  data-num="A·26" data-title="MAY 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO160 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p028.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO160 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·26</span>
+              <span class="frame__title">MAY 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p029.jpg" data-hover-label="OPEN"
+                  data-num="A·27" data-title="MAY 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/520s ・ ISO50 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p029.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/520s ・ ISO50 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·27</span>
+              <span class="frame__title">MAY 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p030.jpg" data-hover-label="OPEN"
+                  data-num="A·28" data-title="MAY 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO50 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p030.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO50 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·28</span>
+              <span class="frame__title">MAY 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p031.jpg" data-hover-label="OPEN"
+                  data-num="A·29" data-title="JUN 2025" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/160s ・ ISO40 ・ 2025">
+            <div class="frame__media"><img src="images/archive/thumb/p031.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/160s ・ ISO40 ・ 2025" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·29</span>
+              <span class="frame__title">JUN 2025</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p032.jpg" data-hover-label="OPEN"
+                  data-num="A·30" data-title="JUN 2024" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/100s ・ ISO40 ・ 2024">
+            <div class="frame__media"><img src="images/archive/thumb/p032.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/100s ・ ISO40 ・ 2024" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·30</span>
+              <span class="frame__title">JUN 2024</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p033.jpg" data-hover-label="OPEN"
+                  data-num="A·31" data-title="MAR 2026" data-place="iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO80 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p033.jpg" alt="Photograph — iPhone 15 ・ 6mm ・ f/1.6 ・ 1/50s ・ ISO80 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·31</span>
+              <span class="frame__title">MAR 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 6mm ・ f/1.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p034.jpg" data-hover-label="OPEN"
+                  data-num="A·32" data-title="MAR 2026" data-place="iPhone 15 ・ 2mm ・ f/2.4 ・ 1/10s ・ ISO1000 ・ 2026">
+            <div class="frame__media"><img src="images/archive/thumb/p034.jpg" alt="Photograph — iPhone 15 ・ 2mm ・ f/2.4 ・ 1/10s ・ ISO1000 ・ 2026" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·32</span>
+              <span class="frame__title">MAR 2026</span>
+              <span class="frame__meta mono">iPhone 15 ・ 2mm ・ f/2.4</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p035.jpg" data-hover-label="OPEN"
+                  data-num="A·33" data-title="JAN 2011" data-place="Nikon D5100 ・ 116mm ・ f/4.8 ・ 1/2000s ・ ISO400 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p035.jpg" alt="Photograph — Nikon D5100 ・ 116mm ・ f/4.8 ・ 1/2000s ・ ISO400 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·33</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 116mm ・ f/4.8</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p036.jpg" data-hover-label="OPEN"
+                  data-num="A·34" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/1000s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p036.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/1000s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·34</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/1.8</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p037.jpg" data-hover-label="OPEN"
+                  data-num="A·35" data-title="JAN 2011" data-place="Nikon D5100 ・ 55mm ・ f/4.0 ・ 1/2000s ・ ISO400 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p037.jpg" alt="Photograph — Nikon D5100 ・ 55mm ・ f/4.0 ・ 1/2000s ・ ISO400 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·35</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 55mm ・ f/4.0</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p038.jpg" data-hover-label="OPEN"
+                  data-num="A·36" data-title="JAN 2011" data-place="Nikon D5100 ・ 200mm ・ f/5.6 ・ 1/1000s ・ ISO400 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p038.jpg" alt="Photograph — Nikon D5100 ・ 200mm ・ f/5.6 ・ 1/1000s ・ ISO400 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·36</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 200mm ・ f/5.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p039.jpg" data-hover-label="OPEN"
+                  data-num="A·37" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/4.5 ・ 1/800s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p039.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/4.5 ・ 1/800s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·37</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/4.5</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p040.jpg" data-hover-label="OPEN"
+                  data-num="A·38" data-title="JAN 2011" data-place="Nikon D5100 ・ 70mm ・ f/4.2 ・ 1/2000s ・ ISO400 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p040.jpg" alt="Photograph — Nikon D5100 ・ 70mm ・ f/4.2 ・ 1/2000s ・ ISO400 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·38</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 70mm ・ f/4.2</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p041.jpg" data-hover-label="OPEN"
+                  data-num="A·39" data-title="JAN 2011" data-place="Nikon D5100 ・ 200mm ・ f/5.6 ・ 1/1000s ・ ISO400 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p041.jpg" alt="Photograph — Nikon D5100 ・ 200mm ・ f/5.6 ・ 1/1000s ・ ISO400 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·39</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 200mm ・ f/5.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p042.jpg" data-hover-label="OPEN"
+                  data-num="A·40" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p042.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·40</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/3.5</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p043.jpg" data-hover-label="OPEN"
+                  data-num="A·41" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/5.6 ・ 1/3200s ・ ISO400 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p043.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/5.6 ・ 1/3200s ・ ISO400 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·41</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/5.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p044.jpg" data-hover-label="OPEN"
+                  data-num="A·42" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p044.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·42</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/3.5</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p045.jpg" data-hover-label="OPEN"
+                  data-num="A·43" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/22.0 ・ 1/40s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p045.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/22.0 ・ 1/40s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·43</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/22.0</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p046.jpg" data-hover-label="OPEN"
+                  data-num="A·44" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p046.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·44</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/3.5</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p047.jpg" data-hover-label="OPEN"
+                  data-num="A·45" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p047.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·45</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/3.5</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p048.jpg" data-hover-label="OPEN"
+                  data-num="A·46" data-title="JAN 2011" data-place="Nikon D5100 ・ 55mm ・ f/4.0 ・ 1/10s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p048.jpg" alt="Photograph — Nikon D5100 ・ 55mm ・ f/4.0 ・ 1/10s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·46</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 55mm ・ f/4.0</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p049.jpg" data-hover-label="OPEN"
+                  data-num="A·47" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/3200s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p049.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/3200s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·47</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/1.8</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p050.jpg" data-hover-label="OPEN"
+                  data-num="A·48" data-title="JAN 2011" data-place="Nikon D5100 ・ 92mm ・ f/6.3 ・ 1/640s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p050.jpg" alt="Photograph — Nikon D5100 ・ 92mm ・ f/6.3 ・ 1/640s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·48</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 92mm ・ f/6.3</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p051.jpg" data-hover-label="OPEN"
+                  data-num="A·49" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/4000s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p051.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/4000s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·49</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/1.8</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p052.jpg" data-hover-label="OPEN"
+                  data-num="A·50" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/3200s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p052.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/3200s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·50</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/1.8</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p053.jpg" data-hover-label="OPEN"
+                  data-num="A·51" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/4.0 ・ 1/2000s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p053.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/4.0 ・ 1/2000s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·51</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/4.0</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p054.jpg" data-hover-label="OPEN"
+                  data-num="A·52" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p054.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/3.5 ・ 1/3200s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·52</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/3.5</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p055.jpg" data-hover-label="OPEN"
+                  data-num="A·53" data-title="JAN 2011" data-place="Nikon D5100 ・ 200mm ・ f/5.6 ・ 1/400s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p055.jpg" alt="Photograph — Nikon D5100 ・ 200mm ・ f/5.6 ・ 1/400s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·53</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 200mm ・ f/5.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p056.jpg" data-hover-label="OPEN"
+                  data-num="A·54" data-title="DEC 2010" data-place="Nikon D5100 ・ 50mm ・ f/22.0 ・ 1s ・ ISO100 ・ 2010">
+            <div class="frame__media"><img src="images/archive/thumb/p056.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/22.0 ・ 1s ・ ISO100 ・ 2010" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·54</span>
+              <span class="frame__title">DEC 2010</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/22.0</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p057.jpg" data-hover-label="OPEN"
+                  data-num="A·55" data-title="JAN 2011" data-place="Nikon D5100 ・ 200mm ・ f/5.6 ・ 1/800s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p057.jpg" alt="Photograph — Nikon D5100 ・ 200mm ・ f/5.6 ・ 1/800s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·55</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 200mm ・ f/5.6</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p058.jpg" data-hover-label="OPEN"
+                  data-num="A·56" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/4.0 ・ 1/2000s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p058.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/4.0 ・ 1/2000s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·56</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/4.0</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p059.jpg" data-hover-label="OPEN"
+                  data-num="A·57" data-title="JAN 2011" data-place="Nikon D5100 ・ 135mm ・ f/5.0 ・ 1/1000s ・ ISO3200 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p059.jpg" alt="Photograph — Nikon D5100 ・ 135mm ・ f/5.0 ・ 1/1000s ・ ISO3200 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·57</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 135mm ・ f/5.0</span>
+            </figcaption>
+          </figure>
+          <figure class="frame" data-img="images/archive/p060.jpg" data-hover-label="OPEN"
+                  data-num="A·58" data-title="JAN 2011" data-place="Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/4000s ・ ISO100 ・ 2011">
+            <div class="frame__media"><img src="images/archive/thumb/p060.jpg" alt="Photograph — Nikon D5100 ・ 50mm ・ f/1.8 ・ 1/4000s ・ ISO100 ・ 2011" loading="lazy"/></div>
+            <figcaption class="frame__cap">
+              <span class="frame__num mono">A·58</span>
+              <span class="frame__title">JAN 2011</span>
+              <span class="frame__meta mono">Nikon D5100 ・ 50mm ・ f/1.8</span>
+            </figcaption>
+          </figure>
+        
+        </div>
+
+        <div class="reel__hud">
+          <span class="reel__hint mono"><span class="reel__hint-dot"></span>Drag ・ Scroll ・ Click to view</span>
+          <div class="reel__progress"><span class="reel__bar" id="reelBar"></span></div>
+          <span class="reel__count mono"><b id="reelIndex">01</b> / 58</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <footer class="contact" id="contact">
+      <div class="about__index mono">04 / Contact</div>
+      <h2 class="contact__title">
+        <span class="contact__line"><span class="split" data-split>LET'S</span></span>
+        <span class="contact__line contact__line--serif"><span class="serif">create</span></span>
+        <span class="contact__line"><span class="split" data-split>TOGETHER</span></span>
+      </h2>
+      <a href="mailto:dhrumilkadchha@gmail.com" class="contact__btn" id="magnetBtn" data-hover>
+        <span class="contact__btn-fill"></span>
+        <span class="contact__btn-text">dhrumilkadchha@gmail.com</span>
+      </a>
+
+      <!-- Contact detail grid -->
+      <div class="contact__grid">
+        <div class="contact__cell reveal-line">
+          <h3 class="mono">Contact</h3>
+          <a class="contact__link" href="mailto:dhrumilkadchha@gmail.com" data-hover>dhrumilkadchha@gmail.com</a>
+          <span class="contact__sub mono">Bangalore, India ・ Working worldwide</span>
+        </div>
+        <div class="contact__cell reveal-line">
+          <h3 class="mono">Availability</h3>
+          <p class="contact__val"><span class="contact__dot"></span>Open for freelance &amp; collaborations</p>
+          <span class="contact__sub mono">Product ・ Brand ・ Photography</span>
+        </div>
+        <div class="contact__cell reveal-line">
+          <h3 class="mono">Socials</h3>
+          <div class="contact__links">
+            <a class="contact__link" href="https://www.instagram.com/photos.labyrinth/" target="_blank" rel="noopener" data-hover>Instagram</a>
+            <a class="contact__link" href="https://www.linkedin.com/in/dhrumilkadchha/" target="_blank" rel="noopener" data-hover>LinkedIn</a>
+            <a class="contact__link" href="https://x.com/dhrumil_kadchha" target="_blank" rel="noopener" data-hover>X (Twitter)</a>
+          </div>
+          <span class="contact__sub mono">@photos.labyrinth</span>
+        </div>
+        <div class="contact__cell reveal-line">
+          <h3 class="mono">Local time</h3>
+          <p class="contact__val"><span id="clockGrid">—</span></p>
+          <span class="contact__sub mono">Usually replies within 48h</span>
+        </div>
+      </div>
+
+      <div class="contact__foot">
+        <span class="mono">© 2026 Dhrumil Kadchha — Bangalore, India</span>
+        <div class="contact__socials">
+          <a href="https://www.instagram.com/photos.labyrinth/" target="_blank" rel="noopener" data-hover>Instagram</a>
+          <a href="https://www.linkedin.com/in/dhrumilkadchha/" target="_blank" rel="noopener" data-hover>LinkedIn</a>
+          <a href="https://x.com/dhrumil_kadchha" target="_blank" rel="noopener" data-hover>X</a>
+        </div>
+        <span class="mono" id="clock">--:--:-- IST</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Project case study (detail view) -->
+  <div class="case" id="case" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Project case study">
+    <div class="case__backdrop" id="caseBackdrop"></div>
+    <button class="case__close" id="caseClose" aria-label="Close case study" data-hover><span></span><span></span></button>
+    <div class="case__scroll" id="caseScroll" data-lenis-prevent><div class="case__inner" id="caseInner"></div></div>
+  </div>
+
+  <!-- Lightbox (photo viewer) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <div class="lightbox__backdrop" id="lightboxBackdrop"></div>
+    <button class="lightbox__close" id="lightboxClose" aria-label="Close viewer" data-hover>
+      <span></span><span></span>
+    </button>
+    <figure class="lightbox__stage">
+      <div class="lightbox__imgwrap"><img id="lightboxImg" src="" alt=""/></div>
+      <figcaption class="lightbox__meta">
+        <span class="mono" id="lightboxNum">A·-1</span>
+        <h3 id="lightboxTitle">—</h3>
+        <span class="mono" id="lightboxPlace">—</span>
+      </figcaption>
+    </figure>
+    <div class="lightbox__nav">
+      <button class="lightbox__arrow" id="lightboxPrev" aria-label="Previous photo" data-hover>←</button>
+      <button class="lightbox__arrow" id="lightboxNext" aria-label="Next photo" data-hover>→</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
