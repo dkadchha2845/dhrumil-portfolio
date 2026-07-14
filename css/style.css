@@ -185,14 +185,13 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   white-space: nowrap;
   transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), filter 0.5s var(--ease), font-size 0.45s var(--ease);
 }
-.header__logo-short { opacity: 1; transform: translateY(0); filter: blur(0); font-size: 1.35em; }
+.header__logo-short { opacity: 1; transform: translateY(0); filter: blur(0); }
 .header__logo-full { opacity: 0; transform: translateY(-6px); filter: blur(3px); }
 
 .header__logo:hover .header__logo-short { opacity: 0; transform: translateY(6px); filter: blur(3px); }
 .header__logo:hover .header__logo-full { opacity: 1; transform: translateY(0); filter: blur(0); }
 
 .header__logo-dot { font-family: var(--font-pixel); font-style: normal; color: var(--accent); font-size: 0.68em; margin-left: 1px; }
-.header__logo-copy { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 0.55em; vertical-align: super; margin-left: 1px; line-height: 1; }
 .progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 105; pointer-events: none; }
 .progress span { display: block; height: 100%; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
 

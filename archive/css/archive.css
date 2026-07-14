@@ -217,7 +217,6 @@ html.archive-failsafe .archive-counter {
   opacity: 0;
   transform: translateY(-6px);
   filter: blur(3px);
-  font-size: 1em;
 }
 
 .archive-header__logo:hover .archive-header__logo-short {
@@ -240,15 +239,6 @@ html.archive-failsafe .archive-counter {
   margin-left: 1px;
 }
 
-.archive-header__logo-copy {
-  font-family: var(--font-serif);
-  font-style: italic;
-  color: var(--accent);
-  font-size: 0.55em;
-  vertical-align: super;
-  margin-left: 1px;
-  line-height: 1;
-}
 
 .archive-header__center {
   position: absolute;
