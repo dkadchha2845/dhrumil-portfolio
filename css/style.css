@@ -174,7 +174,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   position: relative;
   display: inline-grid;
   flex-shrink: 0;
-  font-family: var(--font-wagon); font-style: italic; font-weight: 300;
+  font-family: var(--font-serif); font-style: italic; font-weight: 400;
   font-size: clamp(21px, 2.4vw, 28px); letter-spacing: 0.01em;
   transition: font-size 0.45s var(--ease);
 }

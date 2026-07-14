@@ -195,7 +195,7 @@
         onOpen();
       };
       gsap.timeline({ onComplete: finish })
-        .to(".archive-entrance__label, .archive-entrance__count, .archive-entrance__bar", { opacity: 0, duration: 0.3 })
+        .to(".archive-entrance__inner", { opacity: 0, duration: 0.3 })
         .to(".archive-entrance__panel--top", { yPercent: -101, duration: REDUCED ? 0.01 : 1, ease: "power4.inOut" }, 0.1)
         .to(".archive-entrance__panel--bottom", { yPercent: 101, duration: REDUCED ? 0.01 : 1, ease: "power4.inOut" }, 0.1);
       setTimeout(finish, 1600); // wall-clock failsafe

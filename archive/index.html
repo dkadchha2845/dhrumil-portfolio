@@ -36,9 +36,14 @@
   <div class="archive-entrance" id="archiveEntrance">
     <div class="archive-entrance__panel archive-entrance__panel--top"></div>
     <div class="archive-entrance__panel archive-entrance__panel--bottom"></div>
-    <div class="archive-entrance__label mono">LOADING EXHIBITION</div>
-    <div class="archive-entrance__bar"><i id="entranceBar"></i></div>
-    <div class="archive-entrance__count mono" id="entranceCount">00 / 60</div>
+    <div class="archive-entrance__inner">
+      <div class="archive-entrance__title">Exhibition<span class="archive-entrance__dot">.</span></div>
+      <div class="archive-entrance__bar"><i id="entranceBar"></i></div>
+      <div class="archive-entrance__meta">
+        <span class="archive-entrance__label mono">LOADING ARCHIVE</span>
+        <span class="archive-entrance__count mono" id="entranceCount">00 / 60</span>
+      </div>
+    </div>
   </div>
 
   <!-- Wipe (archive → home) -->
@@ -56,7 +61,10 @@
 
   <!-- Header -->
   <header class="archive-header" id="archiveHeader">
-    <a href="/" class="archive-header__logo" data-hover aria-label="Back to Home">DK<i>.</i></a>
+    <a href="/" class="archive-header__logo" data-hover aria-label="Back to Home">
+      <span class="archive-header__logo-short" aria-hidden="true">© DK<span class="archive-header__logo-dot">.</span></span>
+      <span class="archive-header__logo-full" aria-hidden="true">© Dhrumil Kadchha<span class="archive-header__logo-dot">.</span></span>
+    </a>
     <div class="archive-header__center mono">EXHIBITION — <em id="headerMode">FLOW</em></div>
     <a href="/" class="archive-header__close mono" data-hover>
       <span>CLOSE</span>
