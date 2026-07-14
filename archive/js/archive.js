@@ -466,9 +466,12 @@
       // tz=1 -> zoomed in (largeR, cy below screen)
       // tz=0.3 -> zoomed out (smallR, cy center of screen)
       var t = (tz - 0.3) / 0.7;
+      var galleryTop = gallery.getBoundingClientRect().top || 96;
+      var trueCenterY = (window.innerHeight / 2) - galleryTop;
+      
       var currentR = g.smallR + (g.largeR - g.smallR) * t;
-      var cyLarge = g.H * 0.52 + g.largeR; // Wheel center when zoomed in
-      var cySmall = g.H / 2; // Wheel center when zoomed out
+      var cyLarge = trueCenterY + g.largeR; // Focused item at true center
+      var cySmall = trueCenterY; // Wheel centered at true center
       var currentCy = cySmall + (cyLarge - cySmall) * t;
       var cx = g.W / 2;
       
