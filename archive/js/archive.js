@@ -444,7 +444,7 @@
       
       var need = (items.length * (iw + gap)) / (2 * Math.PI);
       var largeR = Math.max(need, H * 0.9);
-      var smallR = Math.min(W, H) * 0.45;
+      var smallR = Math.min(W, H) * 0.30;
       var step = 360 / items.length;
       
       this.geo = { largeR: largeR, smallR: smallR, step: step, W: W, H: H, iw: iw, ih: ih };
@@ -464,8 +464,8 @@
       
       // Interpolate radius and center Y based on zoom
       // tz=1 -> zoomed in (largeR, cy below screen)
-      // tz=0.2 -> zoomed out (smallR, cy center of screen)
-      var t = (tz - 0.2) / 0.8;
+      // tz=0.3 -> zoomed out (smallR, cy center of screen)
+      var t = (tz - 0.3) / 0.7;
       var currentR = g.smallR + (g.largeR - g.smallR) * t;
       var cyLarge = g.H * 0.52 + g.largeR; // Wheel center when zoomed in
       var cySmall = g.H / 2; // Wheel center when zoomed out
@@ -568,7 +568,7 @@
       cleanups.push(function () { gsap.ticker.remove(tickFn); });
 
       function setZoom(z) {
-        self.state.tz = clamp(0.2, 1.0, z);
+        self.state.tz = clamp(0.3, 1.0, z);
         if (zoomVal) zoomVal.textContent = Math.round(self.state.tz * 100) + "%";
       }
       self.setZoom = setZoom;
@@ -617,6 +617,23 @@
       };
       window.addEventListener("keydown", keys);
       cleanups.push(function () { window.removeEventListener("keydown", keys); });
+
+      var dbl = function (e) {
+        if (e.target.closest && e.target.closest(".gallery-item")) return;
+        var cur = self.state.tz > 0.6 ? 0.3 : 1;
+        setZoom(cur);
+      };
+      gallery.addEventListener("dblclick", dbl);
+      cleanups.push(function () { gallery.removeEventListener("dblclick", dbl); });
+
+      var zin = $("#zoomIn"), zout = $("#zoomOut");
+      var zi = function () { setZoom(self.state.tz + 0.2); }, zo = function () { setZoom(self.state.tz - 0.2); };
+      if (zin) zin.addEventListener("click", zi);
+      if (zout) zout.addEventListener("click", zo);
+      cleanups.push(function () {
+        if (zin) zin.removeEventListener("click", zi);
+        if (zout) zout.removeEventListener("click", zo);
+      });
 
       var onResize = function () { self.layout(); self.setFocusCaption(self.place(true), false); };
       window.addEventListener("resize", onResize);
