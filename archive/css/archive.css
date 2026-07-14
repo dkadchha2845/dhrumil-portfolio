@@ -366,28 +366,12 @@ html.archive-failsafe .archive-counter { opacity: 1 !important; transform: none 
 }
 
 /* ============================================================
-   MODE: GRID — explorer
-   ============================================================ */
-.gallery[data-mode="grid"] { padding: 2vh var(--pad) 18vh; perspective: 1200px; }
-.gallery[data-mode="grid"] .gallery__wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(218px, 1fr));
-  gap: 0.9rem;
-}
-.gallery[data-mode="grid"] .gallery-item { aspect-ratio: 4 / 5; }
-/* dim through the media layer — item opacity is owned by GSAP inline styles */
-.gallery[data-mode="grid"] .gallery-item .gallery-item__media { transition: opacity 0.5s var(--ease); }
-.gallery[data-mode="grid"] .gallery__wrapper.has-hover .gallery-item:not(.is-hovered) .gallery-item__media { opacity: 0.35; }
-@media (max-width: 620px) {
-  .gallery[data-mode="grid"] .gallery__wrapper { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.55rem; }
-}
-
-/* ============================================================
    MODE: ORBIT — the wheel
    ============================================================ */
 .gallery[data-mode="circular"] {
   height: calc(100vh - 96px);
   overflow: hidden;
+  perspective: 1600px;
   cursor: grab;
   touch-action: none;
 }
@@ -524,7 +508,7 @@ html.archive-failsafe .archive-counter { opacity: 1 !important; transform: none 
   .gallery[data-mode="horizontal"],
   .gallery[data-mode="circular"],
   .gallery[data-mode="floating"] { min-height: calc(100vh - 84px); height: calc(100vh - 84px); }
-  .gallery[data-mode="vertical"], .gallery[data-mode="grid"] { height: auto; }
+  .gallery[data-mode="vertical"] { height: auto; }
   .archive-counter { display: none; }
   .gallery-hint { bottom: 6rem; }
   .zoom-hud { bottom: 8.2rem; }

@@ -428,47 +428,7 @@
     },
   };
 
-  /* ================== GRID (explorer) ================== */
-  MODES.grid = {
-    label: "GRID", scroll: true, dragHint: false,
-    hint: "HOVER TO EXPLORE · CLICK TO VIEW",
-    layout: function () { return null; },
-    mount: function () {
-      var cleanups = [];
-      if (lenis) lenis.start();
-      document.body.classList.remove("is-fixed-mode");
-      var sts = makeReveals({ opacity: 0, y: 34, scale: 0.94 });
-      cleanups.push(function () { sts.forEach(function (st) { st.kill(); }); });
-      cleanups.push(makeTilt(7));
-      cleanups.push(makeScrollCounter());
 
-      // sibling dim
-      if (!TOUCH) {
-        var over = function (e) {
-          var item = e.target.closest && e.target.closest(".gallery-item");
-          if (!item) return;
-          wrapper.classList.add("has-hover");
-          items.forEach(function (el) { el.classList.toggle("is-hovered", el === item); });
-        };
-        var out = function (e) {
-          if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".gallery-item")) return;
-          wrapper.classList.remove("has-hover");
-        };
-        wrapper.addEventListener("mouseover", over);
-        wrapper.addEventListener("mouseleave", out);
-        cleanups.push(function () {
-          wrapper.removeEventListener("mouseover", over);
-          wrapper.removeEventListener("mouseleave", out);
-          wrapper.classList.remove("has-hover");
-          items.forEach(function (el) { el.classList.remove("is-hovered"); });
-        });
-      }
-      ScrollTrigger.refresh();
-      return cleanups;
-    },
-  };
-
-  /* ================== REEL (horizontal) ================== */
   MODES.horizontal = {
     label: "REEL", scroll: false, dragHint: true,
     hint: "DRAG · SCROLL TO FLOW",
@@ -570,47 +530,48 @@
       var H = gallery.offsetHeight || (window.innerHeight - 96);
       var iw = items[0] ? items[0].offsetWidth || 160 : 160;
       var ih = items[0] ? items[0].offsetHeight || iw * 4 / 3 : 213;
-      // circumference fits every frame with breathing room; never tighter than a tall arc
-      var need = (items.length * iw * 1.32) / (2 * Math.PI);
-      var R = Math.max(need, H * 0.9);
+      var gap = 40;
+      var R = Math.max((items.length * (iw + gap)) / (2 * Math.PI), W * 0.55);
       var cx = W / 2;
-      var cy = H * 0.52 + R;              // wheel centre far below — top arc crosses mid-screen
+      var cy = H / 2; // perfectly centered vertically
       var step = 360 / items.length;
       this.geo = { R: R, cx: cx, cy: cy, step: step, W: W, H: H, iw: iw, ih: ih };
-      // keep current focus if re-laying out, else focus item 0
+      
       var focus = this.focusIdx || 0;
       this.state.rot = -focus * step;
 
-      if (orbitRing) {
-        gsap.set(orbitRing, { width: R * 2, height: R * 2, left: cx - R, top: cy - R });
-      }
-      this.place(false, true); // position every frame — morph targets must be real
+      if (orbitRing) orbitRing.style.display = "none";
+      this.place(false, true); 
       return items.map(function (el) {
-        return { x: gsap.getProperty(el, "x"), y: gsap.getProperty(el, "y"), rot: gsap.getProperty(el, "rotation"), scale: 1 };
+        return { x: gsap.getProperty(el, "x"), y: gsap.getProperty(el, "y"), rot: gsap.getProperty(el, "rotationY"), scale: 1 };
       });
     },
     place: function (withFocusFx, forceAll) {
       var g = this.geo, rot = this.state.rot, step = g.step;
       var best = 0, bd = Infinity;
       for (var i = 0; i < items.length; i++) {
-        var ang = (i * step + rot - 90) * Math.PI / 180;
-        var x = g.cx + Math.cos(ang) * g.R - g.iw / 2;
-        var y = g.cy + Math.sin(ang) * g.R - g.ih / 2;
-        var deg = i * step + rot; // 0 = focused (top)
+        var deg = i * step + rot; // 0 = focused (center)
         var norm = ((deg % 360) + 540) % 360 - 180; // -180..180
         var ad = Math.abs(norm);
         if (ad < bd) { bd = ad; best = i; }
-        var vis = ad < 75; // cull everything outside the visible arc (increased to 75 deg so edges aren't empty)
+        var vis = ad < 95; // cull everything outside the front cylinder arc
         items[i].style.visibility = vis ? "" : "hidden";
-        if (!vis && !forceAll) continue; // hidden items get fresh transforms the frame they re-enter
+        if (!vis && !forceAll) continue; 
+        
+        var ang = deg * Math.PI / 180;
+        var x = g.cx + Math.sin(ang) * g.R - g.iw / 2;
+        var z = Math.cos(ang) * g.R - g.R; // z=0 at center, negative away from viewer
+        var y = g.cy - g.ih / 2;
+        
         var focusT = withFocusFx ? clamp(0, 1, 1 - ad / (step * 1.4)) : 0;
         var isHov = items[i].classList.contains("is-hovered");
         items[i]._hov = items[i]._hov || 0;
         items[i]._hov += ((isHov ? 1 : 0) - items[i]._hov) * 0.15;
         
         gsap.set(items[i], {
-          x: x, y: y,
-          rotation: deg,
+          x: x, y: y, z: z,
+          rotationY: deg,
+          rotationZ: 0, // ensure no tilt!
           scale: 1 + focusT * 0.16 + items[i]._hov * 0.15,
           zIndex: Math.round(100 - ad + items[i]._hov * 50),
         });
@@ -628,20 +589,6 @@
       orbitMeta.textContent = [im.category, im.meta.camera, im.meta.settings].filter(Boolean).join(" · ");
       if (animate && !REDUCED) gsap.fromTo(orbitCaption, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", overwrite: true });
       else gsap.set(orbitCaption, { opacity: 1, y: 0 });
-    },
-    snapTo: function (idx, dur) {
-      var self = this, g = this.geo;
-      // shortest path to the rotation that put idx on top
-      var want = -idx * g.step;
-      var cur = self.state.rot;
-      var delta = ((want - cur) % 360 + 540) % 360 - 180;
-      self.snapTween = gsap.to(self.state, {
-        rot: cur + delta,
-        duration: dur || 0.9,
-        ease: "power3.out",
-        overwrite: true,
-        onUpdate: function () { self.setFocusCaption(self.place(true), true); },
-      });
     },
     mount: function () {
       var self = this;
@@ -666,6 +613,7 @@
 
       var autoSpeed = -0.06; // degrees per frame (auto-rotation)
       var tickFn = function () {
+        if (typeof xlbOpen !== 'undefined' && xlbOpen) return;
         if (coasting) {
           self.state.rot += velocity;
           velocity *= 0.94;
@@ -729,15 +677,9 @@
       cleanups.push(function () {
         orbitCaption.classList.remove("is-visible");
         gsap.set(orbitCaption, { opacity: 0 });
-        gsap.to(orbitRing, { opacity: 0, duration: 0.4 });
         items.forEach(function (el) { el.classList.remove("is-focus"); el.style.visibility = ""; });
       });
       return cleanups;
-    },
-    onItemClick: function (i, el) {
-      var self = MODES.circular;
-      if (el.classList.contains("is-focus")) { openLightbox(i, el); return; }
-      self.snapTo(i, 0.9);
     },
   };
 
