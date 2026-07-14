@@ -9,7 +9,7 @@
       "camera": "",
       "settings": ""
     },
-    "orient": "square"
+    "orient": "portrait"
   },
   {
     "src": "/images/archive/p002.jpg",
@@ -21,7 +21,7 @@
       "camera": "",
       "settings": ""
     },
-    "orient": "landscape"
+    "orient": "portrait"
   },
   {
     "src": "/images/archive/p003.jpg",
@@ -31,7 +31,7 @@
     "meta": {
       "title": "FEB 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/35s · ISO200"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/35s \u00b7 ISO200"
     },
     "orient": "portrait"
   },
@@ -43,7 +43,7 @@
     "meta": {
       "title": "FEB 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/50s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/50s \u00b7 ISO40"
     },
     "orient": "portrait"
   },
@@ -55,7 +55,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/9 · 1/8s · ISO100"
+      "settings": "50mm \u00b7 f/9 \u00b7 1/8s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -67,7 +67,7 @@
     "meta": {
       "title": "FEB 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/35s · ISO160"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/35s \u00b7 ISO160"
     },
     "orient": "portrait"
   },
@@ -79,7 +79,7 @@
     "meta": {
       "title": "FEB 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/2400s · ISO32"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/2400s \u00b7 ISO32"
     },
     "orient": "portrait"
   },
@@ -91,7 +91,7 @@
     "meta": {
       "title": "JAN 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/180s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/180s \u00b7 ISO40"
     },
     "orient": "portrait"
   },
@@ -103,7 +103,7 @@
     "meta": {
       "title": "JAN 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/4600s · ISO50"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/4600s \u00b7 ISO50"
     },
     "orient": "portrait"
   },
@@ -115,7 +115,7 @@
     "meta": {
       "title": "NOV 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/17s · ISO500"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/17s \u00b7 ISO500"
     },
     "orient": "portrait"
   },
@@ -127,7 +127,7 @@
     "meta": {
       "title": "OCT 2024",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/5300s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/5300s \u00b7 ISO40"
     },
     "orient": "landscape"
   },
@@ -139,7 +139,7 @@
     "meta": {
       "title": "OCT 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/50s · ISO80"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/50s \u00b7 ISO80"
     },
     "orient": "portrait"
   },
@@ -151,7 +151,7 @@
     "meta": {
       "title": "JAN 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/50s · ISO160"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/50s \u00b7 ISO160"
     },
     "orient": "portrait"
   },
@@ -163,7 +163,7 @@
     "meta": {
       "title": "JAN 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/4000s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/4000s \u00b7 ISO40"
     },
     "orient": "portrait"
   },
@@ -175,7 +175,7 @@
     "meta": {
       "title": "JAN 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/7200s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/7200s \u00b7 ISO40"
     },
     "orient": "portrait"
   },
@@ -187,7 +187,7 @@
     "meta": {
       "title": "DEC 2025",
       "camera": "Apple iPhone 15",
-      "settings": "3mm · f/1.9 · 1/50s · ISO250"
+      "settings": "3mm \u00b7 f/1.9 \u00b7 1/50s \u00b7 ISO250"
     },
     "orient": "landscape"
   },
@@ -199,7 +199,7 @@
     "meta": {
       "title": "DEC 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/250s · ISO32"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/250s \u00b7 ISO32"
     },
     "orient": "portrait"
   },
@@ -211,7 +211,7 @@
     "meta": {
       "title": "NOV 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/25s · ISO320"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/25s \u00b7 ISO320"
     },
     "orient": "portrait"
   },
@@ -223,7 +223,7 @@
     "meta": {
       "title": "OCT 2024",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/5600s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/5600s \u00b7 ISO40"
     },
     "orient": "portrait"
   },
@@ -235,7 +235,7 @@
     "meta": {
       "title": "OCT 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/35s · ISO125"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/35s \u00b7 ISO125"
     },
     "orient": "portrait"
   },
@@ -247,7 +247,7 @@
     "meta": {
       "title": "OCT 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/50s · ISO50"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/50s \u00b7 ISO50"
     },
     "orient": "portrait"
   },
@@ -259,7 +259,7 @@
     "meta": {
       "title": "OCT 2024",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/50s · ISO64"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/50s \u00b7 ISO64"
     },
     "orient": "portrait"
   },
@@ -271,7 +271,7 @@
     "meta": {
       "title": "OCT 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/80s · ISO32"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/80s \u00b7 ISO32"
     },
     "orient": "portrait"
   },
@@ -295,7 +295,7 @@
     "meta": {
       "title": "AUG 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/60s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/60s \u00b7 ISO40"
     },
     "orient": "portrait"
   },
@@ -307,7 +307,7 @@
     "meta": {
       "title": "AUG 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/620s · ISO32"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/620s \u00b7 ISO32"
     },
     "orient": "portrait"
   },
@@ -319,7 +319,7 @@
     "meta": {
       "title": "AUG 2024",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/4600s · ISO50"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/4600s \u00b7 ISO50"
     },
     "orient": "landscape"
   },
@@ -331,7 +331,7 @@
     "meta": {
       "title": "MAY 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/50s · ISO160"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/50s \u00b7 ISO160"
     },
     "orient": "portrait"
   },
@@ -343,7 +343,7 @@
     "meta": {
       "title": "MAY 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/520s · ISO50"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/520s \u00b7 ISO50"
     },
     "orient": "portrait"
   },
@@ -355,7 +355,7 @@
     "meta": {
       "title": "MAY 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/50s · ISO50"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/50s \u00b7 ISO50"
     },
     "orient": "portrait"
   },
@@ -367,7 +367,7 @@
     "meta": {
       "title": "JUN 2025",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/160s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/160s \u00b7 ISO40"
     },
     "orient": "landscape"
   },
@@ -379,7 +379,7 @@
     "meta": {
       "title": "JUN 2024",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/100s · ISO40"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/100s \u00b7 ISO40"
     },
     "orient": "portrait"
   },
@@ -391,7 +391,7 @@
     "meta": {
       "title": "MAR 2026",
       "camera": "Apple iPhone 15",
-      "settings": "6mm · f/1.6 · 1/50s · ISO80"
+      "settings": "6mm \u00b7 f/1.6 \u00b7 1/50s \u00b7 ISO80"
     },
     "orient": "portrait"
   },
@@ -403,7 +403,7 @@
     "meta": {
       "title": "MAR 2026",
       "camera": "Apple iPhone 15",
-      "settings": "2mm · f/2.4 · 1/10s · ISO1000"
+      "settings": "2mm \u00b7 f/2.4 \u00b7 1/10s \u00b7 ISO1000"
     },
     "orient": "landscape"
   },
@@ -415,7 +415,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "116mm · f/4.8 · 1/2000s · ISO400"
+      "settings": "116mm \u00b7 f/4.8 \u00b7 1/2000s \u00b7 ISO400"
     },
     "orient": "landscape"
   },
@@ -427,7 +427,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/1.8 · 1/1000s · ISO100"
+      "settings": "50mm \u00b7 f/1.8 \u00b7 1/1000s \u00b7 ISO100"
     },
     "orient": "portrait"
   },
@@ -439,7 +439,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "55mm · f/4 · 1/2000s · ISO400"
+      "settings": "55mm \u00b7 f/4 \u00b7 1/2000s \u00b7 ISO400"
     },
     "orient": "landscape"
   },
@@ -451,7 +451,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "200mm · f/5.6 · 1/1000s · ISO400"
+      "settings": "200mm \u00b7 f/5.6 \u00b7 1/1000s \u00b7 ISO400"
     },
     "orient": "landscape"
   },
@@ -463,7 +463,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/4.5 · 1/800s · ISO100"
+      "settings": "50mm \u00b7 f/4.5 \u00b7 1/800s \u00b7 ISO100"
     },
     "orient": "portrait"
   },
@@ -475,7 +475,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "70mm · f/4.2 · 1/2000s · ISO400"
+      "settings": "70mm \u00b7 f/4.2 \u00b7 1/2000s \u00b7 ISO400"
     },
     "orient": "landscape"
   },
@@ -487,7 +487,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "200mm · f/5.6 · 1/1000s · ISO400"
+      "settings": "200mm \u00b7 f/5.6 \u00b7 1/1000s \u00b7 ISO400"
     },
     "orient": "landscape"
   },
@@ -499,7 +499,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/3.5 · 1/3200s · ISO100"
+      "settings": "50mm \u00b7 f/3.5 \u00b7 1/3200s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -511,7 +511,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/5.6 · 1/3200s · ISO400"
+      "settings": "50mm \u00b7 f/5.6 \u00b7 1/3200s \u00b7 ISO400"
     },
     "orient": "landscape"
   },
@@ -523,7 +523,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/3.5 · 1/3200s · ISO100"
+      "settings": "50mm \u00b7 f/3.5 \u00b7 1/3200s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -535,7 +535,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/22 · 1/40s · ISO100"
+      "settings": "50mm \u00b7 f/22 \u00b7 1/40s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -547,7 +547,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/3.5 · 1/3200s · ISO100"
+      "settings": "50mm \u00b7 f/3.5 \u00b7 1/3200s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -559,7 +559,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/3.5 · 1/3200s · ISO100"
+      "settings": "50mm \u00b7 f/3.5 \u00b7 1/3200s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -571,7 +571,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "55mm · f/4 · 1/10s · ISO100"
+      "settings": "55mm \u00b7 f/4 \u00b7 1/10s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -583,7 +583,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/1.8 · 1/3200s · ISO100"
+      "settings": "50mm \u00b7 f/1.8 \u00b7 1/3200s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -595,7 +595,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "92mm · f/6.3 · 1/640s · ISO100"
+      "settings": "92mm \u00b7 f/6.3 \u00b7 1/640s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -607,7 +607,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/1.8 · 1/4000s · ISO100"
+      "settings": "50mm \u00b7 f/1.8 \u00b7 1/4000s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -619,7 +619,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/1.8 · 1/3200s · ISO100"
+      "settings": "50mm \u00b7 f/1.8 \u00b7 1/3200s \u00b7 ISO100"
     },
     "orient": "portrait"
   },
@@ -631,7 +631,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/4 · 1/2000s · ISO100"
+      "settings": "50mm \u00b7 f/4 \u00b7 1/2000s \u00b7 ISO100"
     },
     "orient": "square"
   },
@@ -643,7 +643,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/3.5 · 1/3200s · ISO100"
+      "settings": "50mm \u00b7 f/3.5 \u00b7 1/3200s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -655,7 +655,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "200mm · f/5.6 · 1/400s · ISO100"
+      "settings": "200mm \u00b7 f/5.6 \u00b7 1/400s \u00b7 ISO100"
     },
     "orient": "square"
   },
@@ -667,7 +667,7 @@
     "meta": {
       "title": "DEC 2010",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/22 · 1s · ISO100"
+      "settings": "50mm \u00b7 f/22 \u00b7 1s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -679,7 +679,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "200mm · f/5.6 · 1/800s · ISO100"
+      "settings": "200mm \u00b7 f/5.6 \u00b7 1/800s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -691,7 +691,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/4 · 1/2000s · ISO100"
+      "settings": "50mm \u00b7 f/4 \u00b7 1/2000s \u00b7 ISO100"
     },
     "orient": "landscape"
   },
@@ -703,7 +703,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "135mm · f/5 · 1/1000s · ISO3200"
+      "settings": "135mm \u00b7 f/5 \u00b7 1/1000s \u00b7 ISO3200"
     },
     "orient": "landscape"
   },
@@ -715,7 +715,7 @@
     "meta": {
       "title": "JAN 2011",
       "camera": "Nikon D5100",
-      "settings": "50mm · f/1.8 · 1/4000s · ISO100"
+      "settings": "50mm \u00b7 f/1.8 \u00b7 1/4000s \u00b7 ISO100"
     },
     "orient": "landscape"
   }

@@ -696,6 +696,19 @@ mm.add("(max-width: 900px)", () => {
   const lb = document.getElementById("lightbox");
   if (!lb) return;
   const frames = gsap.utils.toArray(".frame");
+  /* The film reel is gone from the homepage; the contact sheet is the only
+     opener left. Synthesize its photo data from the cells so the viewer
+     keeps working without the reel markup. */
+  const sources = frames.length ? frames :
+    gsap.utils.toArray(".sheet__cell[data-frame]").map((cell) => {
+      const thumb = cell.querySelector("img");
+      return { dataset: {
+        img: (thumb?.getAttribute("src") || "").replace("/thumb/", "/"),
+        title: thumb?.alt || "",
+        place: "Photo Archive",
+        num: "A·" + String(parseInt(cell.dataset.frame, 10) + 1).padStart(2, "0"),
+      } };
+    });
   const img = document.getElementById("lightboxImg");
   const wrap = lb.querySelector(".lightbox__imgwrap");
   const backdrop = document.getElementById("lightboxBackdrop");
@@ -705,10 +718,10 @@ mm.add("(max-width: 900px)", () => {
   const stage = lb.querySelector(".lightbox__stage");
   let idx = -1, isOpen = false;
 
-  const preload = (i) => { const f = frames[i]; if (f) { const im = new Image(); im.src = f.dataset.img; } };
+  const preload = (i) => { const f = sources[i]; if (f) { const im = new Image(); im.src = f.dataset.img; } };
 
   function fill(i) {
-    const f = frames[i];
+    const f = sources[i];
     img.style.width = ""; img.style.height = ""; // clear FLIP sizing
     img.src = f.dataset.img;
     img.alt = f.dataset.title || "";
@@ -800,7 +813,7 @@ mm.add("(max-width: 900px)", () => {
       gsap.fromTo(stage, { opacity: 0, scale: 0.92, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: EASE });
       gsap.fromTo(img, { scale: 1.18 }, { scale: 1, duration: 0.9, ease: EASE });
     }
-    preload((i + 1) % frames.length); preload((i - 1 + frames.length) % frames.length);
+    preload((i + 1) % sources.length); preload((i - 1 + sources.length) % sources.length);
   }
 
   function close() {
@@ -821,14 +834,14 @@ mm.add("(max-width: 900px)", () => {
   }
 
   function go(dir) {
-    idx = (idx + dir + frames.length) % frames.length;
+    idx = (idx + dir + sources.length) % sources.length;
     fill(idx);
     const applyFit = () => { const { w, h } = fitLightboxImage(img.naturalWidth / img.naturalHeight); img.style.width = w + "px"; img.style.height = h + "px"; };
     if (img.complete && img.naturalWidth > 0) applyFit();
     else img.addEventListener("load", applyFit, { once: true });
     gsap.fromTo(img, { opacity: 0, x: dir * 60 }, { opacity: 1, x: 0, duration: 0.6, ease: EASE });
     gsap.fromTo([numEl, titleEl, placeEl], { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.04, ease: EASE });
-    preload((idx + 1) % frames.length); preload((idx - 1 + frames.length) % frames.length);
+    preload((idx + 1) % sources.length); preload((idx - 1 + sources.length) % sources.length);
   }
 
   frames.forEach((f, i) => {
@@ -1145,6 +1158,54 @@ if (!TOUCH) {
       const t = document.querySelector(a.getAttribute("href"));
       closeMenu();
       setTimeout(() => { if (t) { if (lenis) lenis.scrollTo(t, { duration: 1.4 }); else t.scrollIntoView({ behavior: "smooth" }); } }, 420);
+    });
+  });
+})();
+
+/* ------------------------------------------------------------
+   Exhibition wipe — premium transition into /archive.
+   Panels close over the page, then we navigate; the archive's
+   entrance opens them again on the other side.
+------------------------------------------------------------ */
+(function initArchiveWipe() {
+  const links = document.querySelectorAll('a[href="/archive"], a[href="/archive/"]');
+  if (!links.length) return;
+
+  // Warm up the archive page + its first thumbnails while the user is here.
+  const prefetch = document.createElement("link");
+  prefetch.rel = "prefetch";
+  prefetch.href = "/archive/";
+  document.head.appendChild(prefetch);
+
+  let wipe = null;
+  function buildWipe() {
+    wipe = document.createElement("div");
+    wipe.className = "wipe";
+    wipe.setAttribute("aria-hidden", "true");
+    wipe.innerHTML =
+      '<div class="wipe__panel wipe__panel--top"></div>' +
+      '<div class="wipe__panel wipe__panel--bottom"></div>' +
+      '<div class="wipe__label">EXHIBITION</div>';
+    document.body.appendChild(wipe);
+  }
+
+  links.forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      const go = () => (window.location.href = a.getAttribute("href"));
+      try { sessionStorage.setItem("dk-wipe", "archive"); } catch (err) {}
+      if (REDUCED) { go(); return; }
+      if (!wipe) buildWipe();
+      wipe.classList.add("is-active");
+      if (lenis) lenis.stop();
+      gsap.timeline()
+        .to(wipe.querySelector(".wipe__panel--top"), { y: "0%", duration: 0.65, ease: "power4.inOut" }, 0)
+        .to(wipe.querySelector(".wipe__panel--bottom"), { y: "0%", duration: 0.65, ease: "power4.inOut" }, 0)
+        .to(wipe.querySelector(".wipe__label"), { opacity: 1, duration: 0.3 }, 0.3)
+        .call(go, null, 0.8);
+      /* Navigation must survive a throttled rAF — same wall-clock rule
+         as every other overlay on this site. */
+      setTimeout(go, 1400);
     });
   });
 })();
