@@ -195,8 +195,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .header.is-scrolled .header__logo:hover .header__logo-full { opacity: 1; transform: translateY(0); filter: blur(0); }
 
 .header__logo-dot { font-family: var(--font-pixel); font-style: normal; color: var(--accent); font-size: 0.68em; margin-left: 1px; }
-
-/* Scroll progress hairline (sits just under the header edge) */
+.header__logo-copy { font-family: var(--font-body); font-style: normal; color: var(--accent); font-size: 0.4em; vertical-align: super; margin-left: 2px; }
 .progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 105; pointer-events: none; }
 .progress span { display: block; height: 100%; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
 
