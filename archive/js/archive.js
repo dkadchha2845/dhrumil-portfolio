@@ -50,7 +50,7 @@
   /* ---------- state ---------- */
   var images = [];
   var items = [];
-  var mode = "vertical";
+  var mode = "circular";
   var switching = false;
   var booted = false;
   var lastDragAt = 0;     // wall-clock of last drag > threshold (click suppression)
@@ -429,153 +429,89 @@
   };
 
 
-  MODES.horizontal = {
-    label: "REEL", scroll: false, dragHint: true,
-    hint: "DRAG · SCROLL TO FLOW",
-    layout: function () {
-      gsap.set(wrapper, { x: 0 });
-      return null;
-    },
-    mount: function () {
-      var cleanups = [];
-      if (lenis) lenis.stop();
-      document.body.classList.add("is-fixed-mode");
-
-      var target = 0, current = 0, velocity = 0, max = 0;
-      function measure() { max = Math.max(0, wrapper.scrollWidth - window.innerWidth); }
-      measure();
-
-      var setX = gsap.quickSetter(wrapper, "x", "px");
-      var imgs = items.map(function (el) { return el.querySelector("img"); });
-
-      var tickFn = function () {
-        if (!drag.isDown) {
-          target = clamp(-max, 0, target + velocity);
-          velocity *= 0.92;
-          if (Math.abs(velocity) < 0.06) velocity = 0;
-        }
-        current += (target - current) * (REDUCED ? 1 : 0.11);
-        var skew = clamp(-6, 6, (target - current) * 0.035);
-        setX(current);
-        gsap.set(wrapper, { skewX: REDUCED ? 0 : skew });
-
-        // focus develop + inner parallax + counter
-        var cx = window.innerWidth / 2, best = 0, bd = Infinity;
-        for (var i = 0; i < items.length; i++) {
-          var r = items[i].getBoundingClientRect();
-          if (r.right < -80 || r.left > window.innerWidth + 80) { items[i].classList.remove("is-focus"); continue; }
-          var c = r.left + r.width / 2, d = Math.abs(c - cx);
-          items[i].classList.toggle("is-focus", d < r.width * 0.7);
-          if (!REDUCED) {
-            var t = clamp(-0.5, 0.5, (c - cx) / window.innerWidth);
-            imgs[i].style.objectPosition = (50 + t * 14) + "% 50%";
-          }
-          if (d < bd) { bd = d; best = i; }
-        }
-        setCounter(best);
-      };
-      gsap.ticker.add(tickFn);
-      cleanups.push(function () {
-        gsap.ticker.remove(tickFn);
-        gsap.set(wrapper, { skewX: 0 });
-        imgs.forEach(function (im) { im.style.objectPosition = ""; });
-        items.forEach(function (el) { el.classList.remove("is-focus"); });
-      });
-
-      var lastDx = 0;
-      var drag = { isDown: false };
-      var killDrag = makeDrag(gallery, {
-        onStart: function () { drag.isDown = true; velocity = 0; lastDx = 0; },
-        onMove: function (dx) { target = clamp(-max - 90, 90, target + dx); lastDx = dx; },
-        onEnd: function () {
-          drag.isDown = false;
-          velocity = clamp(-90, 90, lastDx * 2.4);
-          target = clamp(-max, 0, target); // release rubber-band overshoot
-        },
-      });
-      cleanups.push(killDrag);
-
-      var wheel = function (e) {
-        e.preventDefault();
-        var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-        target = clamp(-max, 0, target - d * 1.25);
-        velocity = 0;
-      };
-      gallery.addEventListener("wheel", wheel, { passive: false });
-      cleanups.push(function () { gallery.removeEventListener("wheel", wheel); });
-
-      var keys = function (e) {
-        if (xlbOpen || switching) return;
-        if (e.key === "ArrowRight") target = clamp(-max, 0, target - 340);
-        if (e.key === "ArrowLeft") target = clamp(-max, 0, target + 340);
-      };
-      window.addEventListener("keydown", keys);
-      cleanups.push(function () { window.removeEventListener("keydown", keys); });
-
-      var onResize = measure;
-      window.addEventListener("resize", onResize);
-      cleanups.push(function () { window.removeEventListener("resize", onResize); });
-      return cleanups;
-    },
-  };
-
   /* ================== ORBIT (circular wheel) ================== */
   MODES.circular = {
     label: "ORBIT", scroll: false, dragHint: true,
-    hint: "DRAG TO ROTATE · CLICK TO FOCUS",
+    hint: "DRAG TO ROTATE · PINCH TO ZOOM",
     geo: null,
-    state: { rot: 0 },
+    state: { rot: 0, tz: 1, z: 1 },
     layout: function () {
       var W = window.innerWidth;
       var H = gallery.offsetHeight || (window.innerHeight - 96);
       var iw = items[0] ? items[0].offsetWidth || 160 : 160;
       var ih = items[0] ? items[0].offsetHeight || iw * 4 / 3 : 213;
       var gap = 40;
-      var R = Math.max((items.length * (iw + gap)) / (2 * Math.PI), W * 0.55);
-      var cx = W / 2;
-      var cy = H / 2; // perfectly centered vertically
+      
+      var need = (items.length * (iw + gap)) / (2 * Math.PI);
+      var largeR = Math.max(need, H * 0.9);
+      var smallR = Math.min(W, H) * 0.45;
       var step = 360 / items.length;
-      this.geo = { R: R, cx: cx, cy: cy, step: step, W: W, H: H, iw: iw, ih: ih };
+      
+      this.geo = { largeR: largeR, smallR: smallR, step: step, W: W, H: H, iw: iw, ih: ih };
       
       var focus = this.focusIdx || 0;
       this.state.rot = -focus * step;
 
-      if (orbitRing) orbitRing.style.display = "none";
+      if (orbitRing) orbitRing.style.display = "block";
       this.place(false, true); 
       return items.map(function (el) {
-        return { x: gsap.getProperty(el, "x"), y: gsap.getProperty(el, "y"), rot: gsap.getProperty(el, "rotationY"), scale: 1 };
+        return { x: gsap.getProperty(el, "x"), y: gsap.getProperty(el, "y"), rot: gsap.getProperty(el, "rotationZ"), scale: gsap.getProperty(el, "scale") };
       });
     },
     place: function (withFocusFx, forceAll) {
       var g = this.geo, rot = this.state.rot, step = g.step;
+      var tz = this.state.z; // smooth interpolated zoom
+      
+      // Interpolate radius and center Y based on zoom
+      // tz=1 -> zoomed in (largeR, cy below screen)
+      // tz=0.2 -> zoomed out (smallR, cy center of screen)
+      var t = (tz - 0.2) / 0.8;
+      var currentR = g.smallR + (g.largeR - g.smallR) * t;
+      var cyLarge = g.H * 0.52 + g.largeR; // Wheel center when zoomed in
+      var cySmall = g.H / 2; // Wheel center when zoomed out
+      var currentCy = cySmall + (cyLarge - cySmall) * t;
+      var cx = g.W / 2;
+      
+      var baseScale = tz;
+
       var best = 0, bd = Infinity;
       for (var i = 0; i < items.length; i++) {
-        var deg = i * step + rot; // 0 = focused (center)
+        var deg = i * step + rot; // 0 = focused (top of wheel)
         var norm = ((deg % 360) + 540) % 360 - 180; // -180..180
         var ad = Math.abs(norm);
         if (ad < bd) { bd = ad; best = i; }
-        var vis = ad < 95; // cull everything outside the front cylinder arc
+        
+        // When zoomed in, cull back half of circle. When zoomed out, show all.
+        var vis = (ad < 100) || (tz < 0.6) || forceAll;
         items[i].style.visibility = vis ? "" : "hidden";
-        if (!vis && !forceAll) continue; 
+        if (!vis) continue; 
         
-        var ang = deg * Math.PI / 180;
-        var x = g.cx + Math.sin(ang) * g.R - g.iw / 2;
-        var z = Math.cos(ang) * g.R - g.R; // z=0 at center, negative away from viewer
-        var y = g.cy - g.ih / 2;
+        var ang = (deg - 90) * Math.PI / 180; // -90 is top of wheel
+        var x = cx + Math.cos(ang) * currentR - g.iw / 2;
+        var y = currentCy + Math.sin(ang) * currentR - g.ih / 2;
         
-        var focusT = withFocusFx ? clamp(0, 1, 1 - ad / (step * 1.4)) : 0;
+        var focusT = (withFocusFx && tz > 0.8) ? clamp(0, 1, 1 - ad / (step * 1.4)) : 0;
         var isHov = items[i].classList.contains("is-hovered");
         items[i]._hov = items[i]._hov || 0;
         items[i]._hov += ((isHov ? 1 : 0) - items[i]._hov) * 0.15;
         
         gsap.set(items[i], {
-          x: x, y: y, z: z,
-          rotationY: deg,
-          rotationZ: 0, // ensure no tilt!
-          scale: 1 + focusT * 0.16 + items[i]._hov * 0.15,
+          x: x, y: y, z: 0,
+          rotationY: 0,
+          rotationZ: deg, // Rotate in 2D
+          scale: (baseScale + focusT * 0.12) + items[i]._hov * 0.1 * baseScale,
           zIndex: Math.round(100 - ad + items[i]._hov * 50),
         });
-        items[i].classList.toggle("is-focus", withFocusFx && ad < step * 0.55);
+        items[i].classList.toggle("is-focus", withFocusFx && ad < step * 0.55 && tz > 0.8);
+      }
+      // Rotate the background ring to match the wheel (only visible when zoomed out)
+      if (orbitRing) {
+        gsap.set(orbitRing, { 
+          x: cx - g.largeR, y: currentCy - g.largeR, 
+          width: g.largeR * 2, height: g.largeR * 2,
+          rotation: rot,
+          scale: currentR / g.largeR
+        });
       }
       return best;
     },
@@ -584,7 +520,7 @@
       this.focusIdx = i;
       setCounter(i);
       var im = images[i];
-      if (!im) return; // safety
+      if (!im) return; 
       orbitTitle.textContent = im.meta.title || "Untitled";
       orbitMeta.textContent = [im.category, im.meta.camera, im.meta.settings].filter(Boolean).join(" · ");
       if (animate && !REDUCED) gsap.fromTo(orbitCaption, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", overwrite: true });
@@ -595,25 +531,24 @@
       var cleanups = [];
       if (lenis) lenis.stop();
       document.body.classList.add("is-fixed-mode");
+      if (zoomHud) zoomHud.classList.add("is-visible");
       self.focusIdx = undefined;
 
       orbitCaption.classList.add("is-visible");
-      gsap.to(orbitRing, { opacity: 0.55, duration: 0.8 });
+      if (orbitRing) gsap.to(orbitRing, { opacity: 0.15, duration: 0.8 });
       var focus = self.place(true);
       self.setFocusCaption(focus, true);
 
-      var velocity = 0, coasting = false, snapTimer = null;
-      var degPerPx = 180 / (Math.PI * self.geo.R); // 1:1 arc-length feel
+      var velocity = 0, coasting = false, pinchZ0 = 1, pinchD0 = 0;
+      var degPerPx = 180 / (Math.PI * self.geo.largeR); // base drag sensitivity
 
-      function stopSnap() { if (self.snapTween) self.snapTween.kill(); coasting = false; }
-      function scheduleSnap(delay) {
-        // We do NOT snap anymore because it interrupts auto-rotation
-        // The user wants it to automatically rotate continuously
-      }
-
-      var autoSpeed = -0.06; // degrees per frame (auto-rotation)
+      var autoSpeed = -0.06;
       var tickFn = function () {
         if (typeof xlbOpen !== 'undefined' && xlbOpen) return;
+        
+        // Smooth zoom interpolation
+        self.state.z += (self.state.tz - self.state.z) * 0.12;
+        
         if (coasting) {
           self.state.rot += velocity;
           velocity *= 0.94;
@@ -622,34 +557,48 @@
           // Cinematic continuous rotation
           self.state.rot += autoSpeed;
         }
-        self.setFocusCaption(self.place(true), false); // animate=false during tick to avoid flashing
+        
+        // Only show caption when zoomed in
+        var opacityT = clamp(0, 1, (self.state.z - 0.7) / 0.3);
+        orbitCaption.style.opacity = opacityT;
+        
+        self.setFocusCaption(self.place(true), false);
       };
       gsap.ticker.add(tickFn);
-      cleanups.push(function () { gsap.ticker.remove(tickFn); clearTimeout(snapTimer); stopSnap(); });
+      cleanups.push(function () { gsap.ticker.remove(tickFn); });
+
+      function setZoom(z) {
+        self.state.tz = clamp(0.2, 1.0, z);
+        if (zoomVal) zoomVal.textContent = Math.round(self.state.tz * 100) + "%";
+      }
+      self.setZoom = setZoom;
+      setZoom(1); // default zoomed in
 
       var lastDx = 0;
       var killDrag = makeDrag(gallery, {
-        onStart: function () { stopSnap(); clearTimeout(snapTimer); velocity = 0; lastDx = 0; },
-        onMove: function (dx) {
-          self.state.rot += dx * degPerPx; // 1:1 with the finger along the arc
+        onStart: function () { velocity = 0; lastDx = 0; coasting = false; },
+        onMove: function (dx, dy) {
+          self.state.rot += dx * degPerPx * (1 / self.state.z); 
           lastDx = dx;
           self.setFocusCaption(self.place(true), true);
         },
         onEnd: function () {
-          velocity = clamp(-3.2, 3.2, lastDx * degPerPx * 1.6);
+          velocity = clamp(-3.2, 3.2, lastDx * degPerPx * 1.6 * (1 / self.state.z));
           if (Math.abs(velocity) > 0.04 && !REDUCED) coasting = true;
         },
+        onPinchStart: function (d) { coasting = false; pinchD0 = d; pinchZ0 = self.state.tz; },
+        onPinch: function (d) { if (pinchD0 > 0) setZoom(pinchZ0 * (d / pinchD0)); },
+        onPinchEnd: function () { pinchD0 = 0; },
       });
       cleanups.push(killDrag);
 
       var wheel = function (e) {
         e.preventDefault();
-        stopSnap(); clearTimeout(snapTimer);
+        if (e.ctrlKey || e.metaKey) { setZoom(self.state.tz * (1 - e.deltaY * 0.0035)); return; }
         var d = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        self.state.rot -= clamp(-26, 26, d * 0.045);
+        self.state.rot -= clamp(-26, 26, d * 0.045 * (1 / self.state.z));
         self.setFocusCaption(self.place(true), false);
-        // Add a bit of velocity from scroll to make it coast nicely
-        velocity = clamp(-1, 1, -d * 0.02);
+        velocity = clamp(-1, 1, -d * 0.02 * (1 / self.state.z));
         coasting = true;
       };
       gallery.addEventListener("wheel", wheel, { passive: false });
@@ -658,10 +607,9 @@
       var keys = function (e) {
         if (xlbOpen || switching) return;
         if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-        stopSnap(); clearTimeout(snapTimer);
         var dir = e.key === "ArrowRight" ? 1 : -1;
         var g = self.geo;
-        self.snapTween = gsap.to(self.state, {
+        gsap.to(self.state, {
           rot: (Math.round(self.state.rot / g.step) - dir) * g.step,
           duration: 0.65, ease: "power3.out", overwrite: true,
           onUpdate: function () { self.setFocusCaption(self.place(true), true); },
@@ -675,8 +623,9 @@
       cleanups.push(function () { window.removeEventListener("resize", onResize); });
 
       cleanups.push(function () {
+        if (zoomHud) zoomHud.classList.remove("is-visible");
         orbitCaption.classList.remove("is-visible");
-        gsap.set(orbitCaption, { opacity: 0 });
+        if (orbitRing) gsap.to(orbitRing, { opacity: 0, duration: 0.3 });
         items.forEach(function (el) { el.classList.remove("is-focus"); el.style.visibility = ""; });
       });
       return cleanups;
@@ -691,16 +640,21 @@
     layout: function () {
       var W = window.innerWidth;
       var H = gallery.offsetHeight || (window.innerHeight - 96);
-      var aw = W * 2.2, ah = H * 2.4; // Tighter torus for better density
+      
+      var iw = items[0] ? items[0].offsetWidth || 220 : 220;
+      var ih = items[0] ? items[0].offsetHeight || 280 : 280;
+      var gap = 40;
+      
+      var cols = Math.ceil(Math.sqrt(items.length * (W / H)));
+      var rows = Math.ceil(items.length / cols);
+      
+      var aw = cols * (iw + gap);
+      var ah = rows * (ih + gap);
+      
       var ox = -(aw - W) / 2, oy = -(ah - H) / 2;
 
-      // jittered shuffled grid → organic scatter without heavy overlap
-      var cols = Math.max(4, Math.round(Math.sqrt(items.length * (aw / ah))));
-      var rows = Math.ceil(items.length / cols);
-      var cw = aw / cols, ch = ah / rows;
       var cells = [];
       for (var c = 0; c < cols * rows; c++) cells.push(c);
-      // deterministic-ish shuffle so reloads feel intentional
       var seed = 7;
       var rand = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
       for (var s = cells.length - 1; s > 0; s--) {
@@ -710,20 +664,22 @@
 
       var nodes = items.map(function (el, i) {
         var cell = cells[i];
-        // Much less random jitter, so it forms a beautiful structured infinite tapestry
-        var gx = (cell % cols + 0.5) * cw + (rand() - 0.5) * cw * 0.35;
-        var gy = (Math.floor(cell / cols) + 0.5) * ch + (rand() - 0.5) * ch * 0.35;
-        var z = 0.7 + rand() * 0.65; // depth 0.7 .. 1.35
+        // Clean staggered grid layout
+        var col = cell % cols;
+        var row = Math.floor(cell / cols);
+        
+        var gx = col * (iw + gap);
+        var gy = row * (ih + gap);
+        
+        // Stagger every other column slightly for an organic feel
+        if (col % 2 !== 0) gy += (ih + gap) / 2;
+
         return {
           el: el,
-          iw: el.offsetWidth || 220, ih: el.offsetHeight || 280,
+          iw: iw, ih: ih,
           bx: ox + gx, by: oy + gy,
-          z: z,
-          par: 0.55 + (z - 0.7) * 0.85,     // parallax multiplier
-          scale: 0.62 + (z - 0.7) * 0.62,   // size by depth
-          rot: (rand() - 0.5) * 16,
-          ph: rand() * Math.PI * 2,
-          sp: 0.25 + rand() * 0.35,
+          z: 1, par: 1, rot: 0, scale: 1,
+          sp: 0, ph: 0,
           qx: gsap.quickSetter(el, "x", "px"),
           qy: gsap.quickSetter(el, "y", "px"),
           qr: gsap.quickSetter(el, "rotation", "deg"),
@@ -741,16 +697,16 @@
         var p = MODES.floating.project(n, wld);
         gsap.set(n.el, {
           x: p.x, y: p.y, rotation: n.rot, scale: n.scale,
-          zIndex: Math.round(n.z * 100),
+          zIndex: 100,
         });
-        n.el.style.filter = "brightness(" + (0.62 + clamp(0, 0.38, (n.z - 0.7) * 0.62)) + ")";
+        n.el.style.filter = "";
         finals[i] = { x: p.x, y: p.y, rot: n.rot, scale: n.scale };
       });
       if (zoomVal) zoomVal.textContent = "100%";
       return finals;
     },
     project: function (n, w) {
-      // world → screen with per-item parallax, wrapped into the world torus
+      // world → screen wrapped into the world torus
       var x = n.bx + w.panX * n.par;
       var y = n.by + w.panY * n.par;
       x = x - w.aw * Math.floor((x - w.ox) / w.aw);
@@ -763,13 +719,11 @@
       var cleanups = [];
       if (lenis) lenis.stop();
       document.body.classList.add("is-fixed-mode");
-      zoomHud.classList.add("is-visible");
+      if (zoomHud) zoomHud.classList.add("is-visible");
 
       var vx = 0, vy = 0, isDown = false, pinchZ0 = 1, pinchD0 = 0;
-      var t0 = performance.now();
 
       var tickFn = function () {
-        var t = (performance.now() - t0) / 1000;
         if (!isDown) {
           w.tx += vx; w.ty += vy;
           vx *= 0.93; vy *= 0.93;
@@ -777,8 +731,8 @@
           if (Math.abs(vy) < 0.05) vy = 0;
           
           // Cinematic auto-drift when not interacting
-          w.tx -= 0.5;
-          w.ty -= 0.3;
+          w.tx -= 0.6;
+          w.ty -= 0.4;
         }
         w.panX += (w.tx - w.panX) * (REDUCED ? 1 : 0.1);
         w.panY += (w.ty - w.panY) * (REDUCED ? 1 : 0.1);
@@ -786,21 +740,14 @@
         gsap.set(wrapper, { scale: w.z });
 
         var m = 260; // cull margin
-        var ramp = Math.min(1, t / 1.4); // float fades in — no pop at mount
         for (var i = 0; i < w.nodes.length; i++) {
           var n = w.nodes[i];
           var p = self.project(n, w);
-          var fx = 0, fy = 0, fr = 0;
-          if (!REDUCED) {
-            fx = Math.sin(t * n.sp + n.ph) * 8 * n.z * ramp;
-            fy = Math.cos(t * n.sp * 0.9 + n.ph * 1.4) * 7 * n.z * ramp;
-            fr = Math.sin(t * 0.4 + n.ph) * 1.6 * ramp;
-          }
-          var sx = p.x + fx, sy = p.y + fy;
+          var sx = p.x, sy = p.y;
           var off = sx < -n.iw - m || sx > w.W + m || sy < -n.ih - m || sy > w.H + m;
           n.el.style.visibility = off ? "hidden" : "";
           if (off) continue;
-          n.qx(sx); n.qy(sy); n.qr(n.rot + fr);
+          n.qx(sx); n.qy(sy); n.qr(n.rot);
         }
         // counter: nearest to screen centre (cheap — uses computed positions)
         if ((tickFn.n = (tickFn.n || 0) + 1) % 14 === 0) {
@@ -1192,6 +1139,9 @@
         gallery.dataset.mode = mode;
         MODES[mode].layout();
         mountCurrent();
+        if (mode !== "vertical") {
+          gsap.to(items, { opacity: 1, duration: 1.2, stagger: 0.02, ease: "power2.out" });
+        }
       });
     });
   }

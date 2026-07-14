@@ -334,44 +334,11 @@ html.archive-failsafe .archive-counter { opacity: 1 !important; transform: none 
 @media (min-width: 1700px) { .gallery[data-mode="vertical"] .gallery__wrapper { columns: 4; } }
 
 /* ============================================================
-   MODE: REEL — horizontal filmstrip
-   ============================================================ */
-.gallery[data-mode="horizontal"] {
-  height: calc(100vh - 96px);
-  overflow: hidden;
-  display: flex; align-items: center;
-  cursor: grab;
-  touch-action: pan-x;
-}
-.gallery[data-mode="horizontal"].is-dragging { cursor: grabbing; }
-.gallery[data-mode="horizontal"] .gallery__wrapper {
-  display: flex; flex-wrap: nowrap; align-items: center;
-  gap: clamp(16px, 2.4vw, 42px);
-  padding: 0 8vw;
-  width: max-content;
-  will-change: transform;
-}
-.gallery[data-mode="horizontal"] .gallery-item {
-  flex-shrink: 0;
-  height: min(56vh, 560px); width: auto;
-}
-.gallery[data-mode="horizontal"] .gallery-item .gallery-item__media img {
-  filter: brightness(0.55) saturate(0.7);
-}
-.gallery[data-mode="horizontal"] .gallery-item.is-focus .gallery-item__media img {
-  filter: brightness(1) saturate(1);
-}
-@media (max-width: 768px) {
-  .gallery[data-mode="horizontal"] .gallery-item { height: 46vh; }
-}
-
-/* ============================================================
    MODE: ORBIT — the wheel
    ============================================================ */
 .gallery[data-mode="circular"] {
   height: calc(100vh - 96px);
   overflow: hidden;
-  perspective: 1600px;
   cursor: grab;
   touch-action: none;
 }

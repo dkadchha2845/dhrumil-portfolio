@@ -788,26 +788,33 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   font-size: 11px; letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--ink);
-  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 60px;
   overflow: hidden;
-  transition: border-color 0.5s var(--ease), color 0.4s var(--ease);
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
   cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .archive-cta__btn::before {
   content: '';
   position: absolute; inset: 0;
   background: var(--accent);
   border-radius: inherit;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.6s var(--ease);
+  transform: translateY(101%);
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
-.archive-cta__btn:hover::before { transform: scaleX(1); }
-.archive-cta__btn:hover { border-color: var(--accent); color: var(--bg); }
+.archive-cta__btn:hover::before { transform: translateY(0); }
+.archive-cta__btn:hover { 
+  border-color: var(--accent); 
+  color: var(--bg); 
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px -10px rgba(255, 62, 0, 0.4);
+}
 .archive-cta__btn span, .archive-cta__btn svg { position: relative; z-index: 1; }
-.archive-cta__btn svg { width: 18px; height: 18px; transition: transform 0.4s var(--ease); }
-.archive-cta__btn:hover svg { transform: translateX(4px); }
+.archive-cta__btn svg { width: 18px; height: 18px; transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1); }
+.archive-cta__btn:hover svg { transform: translateX(6px) rotate(45deg); }
 
 /* ---------- Page wipe (homepage → /archive) ---------- */
 .wipe { position: fixed; inset: 0; z-index: 400; pointer-events: none; visibility: hidden; }
